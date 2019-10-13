@@ -1,0 +1,2 @@
+# Mdout-Cli
+一个Go语言开发的Markdown命令行解析工具，支持将Markdown直接转为Pdf（完整保存图片且可自定义主题与代码语法高亮主题）、将Markdown解析为Html标签、获取Url网页并转为Pdf、读取本地Html文件转为Pdf。
