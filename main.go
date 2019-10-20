@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./cmd"
+	"github.com/JabinGP/mdout/cmd"
 )
 
 func main() {
