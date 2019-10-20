@@ -92,103 +92,101 @@ linux && macOS推荐使用脚本安装
 
 #### windows
 
-##### 下载windows版本
+1. 点击下载
 
-点击下载
+    - windows：[mdout_windows_x86-64.zip](http://112.74.177.253:8000/f/574b3d14ffe04bb1880b/?dl=1)
 
-- windows：[mdout_windows_x86-64.zip](http://112.74.177.253:8000/f/574b3d14ffe04bb1880b/?dl=1)
+    下载后使用zip工具解压缩，解压后会得到一个mdout.exe可执行文件
 
-下载后使用zip工具解压缩，解压后会得到一个mdout.exe可执行文件
+2. 放置软件
 
-##### 放置软件
+    将`mdout.exe`可执行文件放置平时放软件的地方，比如`D:\mdout`这个文件夹里面，此时你的`mdout.exe`的全路径应该是`D:\mdout\mdout.exe`
 
-将`mdout.exe`可执行文件放置平时放软件的地方，比如`D:\mdout`这个文件夹里面，此时你的`mdout.exe`的全路径应该是`D:\mdout\mdout.exe`
+3. 设置环境变量
 
-##### 设置环境变量
+    如果不设置环境变量也可以使用，但是缺点是你需要使用cmd，powershell或者gitbash手动进入`D:\mdout`才能使用`mdout`命令
 
-如果不设置环境变量也可以使用，但是缺点是你需要使用cmd，powershell或者gitbash手动进入`D:\mdout`才能使用`mdout`命令
+    确定路径
+    ![1](./markdown/1.jpg)  
 
-确定路径
-![1](./markdown/1.jpg)  
+    设置环境变量，右键我的电脑 -> 选择属性 -> 左边的高级系统设置
+    ![2](./markdown/2.jpg)  
 
-设置环境变量，右键我的电脑 -> 选择属性 -> 左边的高级系统设置
-![2](./markdown/2.jpg)  
+    选择高级 -> 点击环境变量
+    ![3](./markdown/3.jpg)  
 
-选择高级 -> 点击环境变量
-![3](./markdown/3.jpg)  
+    找到下半部分的系统变量，双击`Path`行
+    ![4](./markdown/4.jpg)  
 
-找到下半部分的系统变量，双击`Path`行
-![4](./markdown/4.jpg)  
+    在弹出来的窗口选择新建
+    ![5](./markdown/5.jpg)  
 
-在弹出来的窗口选择新建
-![5](./markdown/5.jpg)  
+    填入`D:\mdout`，然后一定要连续点完三个确定
+    ![6](./markdown/6.jpg)  
 
-填入`D:\mdout`，然后一定要连续点完三个确定
-![6](./markdown/6.jpg)  
+4. 检验
 
-##### 检验
+    打开cmd，或者powershell，或者你有gitbash都ok（推荐使用命令行的windows用户都装一个gitbash），输入`mdout`，看到如下输出就是成功了
 
-打开cmd，或者powershell，或者你有gitbash都ok（推荐使用命令行的windows用户都装一个gitbash），输入`mdout`，看到如下输出就是成功了
-
-![7](./markdown/7.jpg)
+    ![7](./markdown/7.jpg)
 
 #### linux
 
-##### 下载linux版本
+1. 下载linux版本
 
-点击下载
+    点击下载
 
-- linux：[mdout.linux.x86-64.tar.gz](http://112.74.177.253:8000/f/edcb3b9e460d4d18ab3f/?dl=1)
+    - linux：[mdout.linux.x86-64.tar.gz](http://112.74.177.253:8000/f/edcb3b9e460d4d18ab3f/?dl=1)
 
-下载完成后解压tar.gz包，解压后会得到一个mdout可执行文件
+    下载完成后解压tar.gz包，解压后会得到一个mdout可执行文件
 
-##### 将软件放入可执行文件库
+2. 将软件放入可执行文件库
 
-打开终端，定位到刚刚下载的文件所在路径
+    打开终端，定位到刚刚下载的文件所在路径
 
-```cmd
-cd 你的文件所在文件夹
-```
+    ```cmd
+    cd 你的文件所在文件夹
+    ```
 
-然后将可执行文件直接移动到/usr/local/bin，linux环境下需要sudo权限
+    然后将可执行文件直接移动到/usr/local/bin，linux环境下需要sudo权限
 
-```cmd
-sudo mv ./mdout /usr/local/bin
-```
+    ```cmd
+    sudo mv ./mdout /usr/local/bin
+    ```
 
-输入密码就可以了
+    输入密码就可以了
 
-##### 检验是否成功
+3. 检验是否成功
 
-输入`mdout --version`，看到版本号输出就是成功了
+    输入`mdout --version`，看到版本号输出就是成功了
 
 #### macOS
 
-##### 下载macOS版本
+1. 下载macOS版本
 
-点击下载
+    点击下载
 
-- macOS：[mdout.macOS.x86-64.tar.gz](http://112.74.177.253:8000/f/100873c74622474da4d9/?dl=1)
+    - macOS：[mdout.macOS.x86-64.tar.gz](http://112.74.177.253:8000/f/100873c74622474da4d9/?dl=1)
 
-下载后使用工具解压tar.gz包，解压后会得到一个mdout可执行文件
+    下载后使用工具解压tar.gz包，解压后会得到一个mdout可执行文件
 
-##### 将软件移动到可执行文件库
+2. 将软件移动到可执行文件库
 
-打开终端，定位到刚刚下载的文件所在路径
+    打开终端，定位到刚刚下载的文件所在路径
 
-```cmd
-cd 你的mdout可执行文件所在文件夹
-```
+    ```cmd
+    cd 你的mdout可执行文件所在文件夹
+    ```
 
-然后将可执行文件直接移动到/usr/local/bin
+    然后将可执行文件直接移动到/usr/local/bin
 
-```cmd
-mv ./mdout /usr/local/bin
-```
+    ```cmd
+    mv ./mdout /usr/local/bin
+    ```
 
-##### 检验是否成功移动
+3. 检验是否成功移动
 
-输入`mdout --version`，看到版本号输出就是成功了
+    输入`mdout --version`，看到版本号输出就是成功了
 
 ## 使用说明
 
@@ -214,23 +212,23 @@ mdout 文件路径
 
 #### 文件路径可以是相对路径
 
-##### 文件在当前目录
+- 文件在当前目录
 
-```cmd
-mdout yourfile.md
-```
+    ```cmd
+    mdout yourfile.md
+    ```
 
-##### 或文件在上级目录
+- 或文件在上级目录
 
-```cmd
-mdout ../yourfile.md
-```
+    ```cmd
+    mdout ../yourfile.md
+    ```
 
-#### 文件路径也可以是绝对路径
+- 文件路径也可以是绝对路径
 
-```cmd
-mdout /tmp/markdown/yourfile.md
-```
+    ```cmd
+    mdout /tmp/markdown/yourfile.md
+    ```
 
 ### 帮助文档
 
@@ -290,35 +288,33 @@ mdout支持许多输入类型，其中最普遍的就是markdown，但同样也�
 
 mdout支持指定输出路径，输出文件名
 
-#### 你可以使用`-o`来指定输出路径
+你可以使用`-o`来指定输出路径，`-o`选项同样做了防呆设计，你可以指定路径但不带文件名，mdout会自动识别你输入文件的文件名和你指定的输出类型为你设置名称，但你同样可以指定路径+文件名
 
-`-o`选项同样做了防呆设计，你可以指定路径但不带文件名，mdout会自动识别你输入文件的文件名和你指定的输出类型为你设置名称，但你同样可以指定路径+文件名
+- 指定输出到上级文件夹，自动命名
 
-指定输出到上级文件夹，自动命名
+    ```cmd
+    mdout yourfile.md -o ../
+    ```
 
-```cmd
-mdout yourfile.md -o ../
-```
+- 指定输出到`/tmp/markdown`文件夹，自动命名
 
-指定输出到`/tmp/markdown`文件夹，自动命名
+    ```cmd
+    mdout yourfile.md -o /tmp/markdown
+    ```
 
-```cmd
-mdout yourfile.md -o /tmp/markdown
-```
+- 指定输出到当前文件夹下的`badoutput.name`
 
-指定输出到当前文件夹下的`badoutput.name`
+    ```cmd
+    mdout yourfile.md -o badoutput.name
+    ```
 
-```cmd
-mdout yourfile.md -o badoutput.name
-```
+    千万不要这么干，尽管程序不会阻止你设置你的文件名，但是使用规范的后缀是个好习惯。
 
-千万不要这么干，尽管程序不会阻止你设置你的文件名，但是使用规范的后缀是个好习惯。
+- 指定输出到当前文件夹下的`goodname.pdf`
 
-指定输出到当前文件夹下的`goodname.pdf`
-
-```cmd
-mdout yourfile.md -o goodname.pdf
-```
+    ```cmd
+    mdout yourfile.md -o goodname.pdf
+    ```
 
 ### 指定主题
 
@@ -350,7 +346,7 @@ mdout有着方便易用的主题系统，你可以很自由地自定义主题，
 
 `mathjax`可以渲染类似这样的公式
 
-```
+```markdown
 $$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$
 ```
 
@@ -373,19 +369,17 @@ mdout预设了8种页面大小，如果有更多需求，可以在issues提出
 
 A4为默认输出页面大小，你可以使用`-f`来指定输出页面的大小。同时做了防呆设计，如果你一不小心打成了大写、小写，甚至你手抽打成了大小写混合，都是可以正常识别的。可惜，防呆不防傻，你把字母都打错了就不能怪我了
 
-##### 你可以使用`-f`指令来指定页面大小格式
+- 指定输出pdf页面格式为A4（闲着没事干敲着玩）
 
-指定输出pdf页面格式为A4（闲着没事干敲着玩）
+    ```cmd
+    mdout yourfile.md -f a4
+    ```
 
-```cmd
-mdout yourfile.md -f a4
-```
+- 指定输出pdf页面格式为Tabloid
 
-指定输出pdf页面格式为Tabloid
-
-```cmd
-mdout yourfile.md -f tabloid
-```
+    ```cmd
+    mdout yourfile.md -f tabloid
+    ```
 
 #### 打印页面方向设置
 
@@ -394,15 +388,13 @@ mdout只支持两种方向
 - 纵向：`portrait`
 - 横向：`landscape`
 
-默认打印页面方向为纵向
+默认打印页面方向为纵向，你可以使用`-r`指令来指定页面方向格式
 
-##### 你可以使用`-r`指令来指定页面方向格式
+- 指定输出pdf页面格式为横向
 
-指定输出pdf页面格式为横向
-
-```cmd
-mdout yourfile.md -r landscape
-```
+    ```cmd
+    mdout yourfile.md -r landscape
+    ```
 
 #### 打印页面边距设置
 
@@ -410,19 +402,19 @@ mdout支持你自定义页面边距，以英寸为单位，默认为0.4英寸
 
 - 0.4英寸 ≈ 10cm
 
-##### 你可以使用`-m`指令来指定页面边距大小
+你可以使用`-m`指令来指定页面边距大小
 
-指定打印边距为0.2英寸
+- 指定打印边距为0.2英寸
 
-```cmd
-mdout yourfile.md -m0.2
-```
+    ```cmd
+    mdout yourfile.md -m0.2
+    ```
 
-去除页面边距
+- 去除页面边距
 
-```cmd
-mdout yourfile.md -m0
-```
+    ```cmd
+    mdout yourfile.md -m0
+    ```
 
 ### 自定义配置文件
 
@@ -551,3 +543,5 @@ mdout有着简单易用的主题系统，跟着下面的步骤来，你可以很
 如果你完成了你的主题修改，你可以将刚刚生成的html删除，或者你想留做自己动手的纪念也是可以的
 
 最后，你可以使用`mdout yourfile.md -e mytheme`来指定使用你的自定义主题啦，或者你可以在前面提到过的`conf.json`里面配置默认使用你的`mytheme`主题
+
+_**如果觉得对你有帮助，点个star吧！**_
