@@ -17,6 +17,7 @@ import (
 	"gitlab.com/golang-commonmark/markdown"
 
 	// 无头chrome api
+	"github.com/JabinGP/mdout/tool"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 
@@ -25,9 +26,6 @@ import (
 
 	// go语言的JQuery，用于html模板拼接
 	"github.com/PuerkitoBio/goquery"
-
-	// 获取家路径
-	dir "github.com/JabinGP/mdout/dir"
 )
 
 // Md 将源文件字节流转为html标签字节流
@@ -46,35 +44,19 @@ func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 	log.Println("开始生成html")
 
 	// 获取用户home目录
-	homeDir := dir.HomeDir()
+	homeDir := tool.GetHomeDir()
 	if homeDir == "" {
 		return nil, errors.New("获取资源目录失败")
 	}
 
 	// 获取资源文件夹路径
-	var htmlSourcePath string = homeDir + `/binmdout/theme/` + theme
+	var themeDir = homeDir + `/mdout/theme/` + theme
 
 	// 资源文件路径
-	var indexHTMLPath string = htmlSourcePath + `/index.html`   // html模板
-	var headHTMLPath string = htmlSourcePath + `/head.html`     // html head标签
-	var scriptHTMLPath string = htmlSourcePath + `/script.html` // html 底部body标签
+	var indexHTMLFullName = themeDir + `/index.html` // html模板
 
-	// 页面整体模板
-	indexHTMLBytes, err := ioutil.ReadFile(indexHTMLPath)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	// 页面head标签
-	headHTMLBytes, err := ioutil.ReadFile(headHTMLPath)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	// 页面底部body标签
-	scriptHTMLBytes, err := ioutil.ReadFile(scriptHTMLPath)
+	// 页面模板
+	indexHTMLBytes, err := ioutil.ReadFile(indexHTMLFullName)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -91,9 +73,7 @@ func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 	}
 
 	// 拼装页面
-	indexHTMLDoc.Find("head").AppendHtml(string(headHTMLBytes))   // 加载页面头部信息
-	indexHTMLDoc.Find("body").AppendHtml(string(*tagBytes))       // 将markdown标签插入html
-	indexHTMLDoc.Find("body").AppendHtml(string(scriptHTMLBytes)) // 加载页面底部js标签
+	indexHTMLDoc.Find(".markdown-body").AppendHtml(string(*tagBytes)) // 将markdown标签插入html
 
 	// 将link标签和script标签中的{{homePath}}和{{theme}}替换成为实际路径
 	indexHTMLDoc.Find("link").Each(func(i int, selection *goquery.Selection) {
@@ -149,16 +129,21 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 	log.Println("加载" + htmlPath + "完成")
 	log.Println("正在获取页面渲染状态")
 
+	// err = chromedp.Run(ctx, chromedp.WaitReady(`.markdown-body`))
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return nil, err
+	// }
 	// 检查是否有同步渲染标记
-	var res []string
+	var isJabinGP bool
 	// eval是下策，因为官方的查找元素api都无法在元素不存在的时候正常运行，会一直卡住
-	err = chromedp.Run(ctx, chromedp.Evaluate(`document.querySelector("#jabingp")==null?[]:["1"]`, &res))
+	err = chromedp.Run(ctx, chromedp.Evaluate(`document.querySelector("#jabingp")!=null`, &isJabinGP))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	if len(res) == 1 { // 有同步渲染标记
+	if isJabinGP { // 有同步渲染标记
 
 		log.Println("页面支持同步渲染进度，开始同步")
 		// 渲染消息

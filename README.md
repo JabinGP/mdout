@@ -77,13 +77,13 @@ linux && macOS推荐使用脚本安装
 - curl方式
 
     ```shell
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh)"
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh)"
     ```
 
 - wget方式
 
     ```shell
-    sh -c "$(wget https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh -O -)"
+    bash -c "$(wget https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh -O -)"
     ```
 
 ### 手动安装
@@ -247,7 +247,7 @@ mdout支持许多输入类型，其中最普遍的就是markdown，但同样也�
 
     ```cmd
     mdout yourfile.md
-    ````
+    ```
 
 - html  
 
@@ -259,7 +259,7 @@ mdout支持许多输入类型，其中最普遍的就是markdown，但同样也�
 
     ```cmd
     mdout http://www.baidu.com
-    ````
+    ```
 
 ### 输出文件类型
 

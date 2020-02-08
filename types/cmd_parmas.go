@@ -1,7 +1,7 @@
 package types
 
-// CmdParmas 用户输入参数
-type CmdParmas struct {
+// Parmas 用户输入参数
+type Parmas struct {
 	// 文件输出路径
 	Out string
 	// 目标文件类型
