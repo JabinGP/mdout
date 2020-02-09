@@ -8,22 +8,24 @@ import (
 	"os"
 	// 命令行框架
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	// 命令执行函数
 
 	// 自定义结构体
 	"github.com/JabinGP/mdout/cmdrun"
-	"github.com/JabinGP/mdout/types"
+	"github.com/JabinGP/mdout/model"
 
 	// 配置文件读取
 	"github.com/JabinGP/mdout/config"
 )
 
 var (
-	// 输入参数
-	cmdParmas types.Parmas
+	v *viper.Viper
+	// 命令行输入参数，与cobra命令行绑定
+	cmdParmas model.Parmas
 	// 配置文件参数
-	confParmas types.Parmas
+	conf model.Config
 	// 根命令
 	rootCmd = &cobra.Command{
 		Use:     "mdout",
@@ -47,24 +49,27 @@ func Execute() {
 func rootRunE(cmd *cobra.Command, args []string) error {
 	// 输出参数
 	showParams()
-
 	// 获取用户输入路径
 	in := args[0]
-
 	return cmdrun.Distribute(in, cmdParmas)
 }
 
-// init，包初始化
+// init 包初始化
 func init() {
+	initConfig()
 	initRootFlags()
 	addCommand()
 }
 
-func initRootFlags() {
-	v := config.NewViper()
-	v.UnmarshalKey("Parmas", &confParmas)
+func initConfig() {
+	v = config.NewViper()
+	v.Unmarshal(&conf)
+}
 
+func initRootFlags() {
 	rootFlags := rootCmd.Flags()
+	confParmas := conf.Parmas
+
 	// 添加Flags：变量 长名 短名 默认值 帮助说明
 	rootFlags.StringVarP(&cmdParmas.Out, "outpath", "o", confParmas.Out, "文件输出的路径")
 	rootFlags.StringVarP(&cmdParmas.Type, "type", "t", confParmas.Type, "输出的文件类型:tag、html、pdf")
@@ -72,10 +77,12 @@ func initRootFlags() {
 	rootFlags.StringVarP(&cmdParmas.PageFormat, "format", "f", confParmas.PageFormat, "打印的页面格式：A5-A1、Legal、Letter、Tabloid")
 	rootFlags.StringVarP(&cmdParmas.PageOrientation, "orientation", "r", confParmas.PageOrientation, "打印的页面方向,可选portrait（纵向）、landscape（横向）")
 	rootFlags.StringVarP(&cmdParmas.PageMargin, "margin", "m", confParmas.PageMargin, "打印的页面边距大小，以英寸为单位")
+	rootFlags.StringVarP(&cmdParmas.ExecPath, "exec-path", "p", confParmas.ExecPath, "Chrome的执行路径")
 }
 
 func addCommand() {
 	rootCmd.AddCommand(installCmd)
+	rootCmd.AddCommand(configCmd)
 }
 
 // 输出参数信息调试
@@ -87,5 +94,6 @@ func showParams() {
 	log.Printf("打印页面格式：%s\n", cmdParmas.PageFormat)
 	log.Printf("打印页面方向：%s\n", cmdParmas.PageOrientation)
 	log.Printf("打印页面边距：%s\n", cmdParmas.PageMargin)
-	log.Println("-----------------------")
+	log.Printf("Chrome的执行路径：%s\n", cmdParmas.ExecPath)
+	log.Println("--------------------------")
 }

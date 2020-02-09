@@ -3,17 +3,16 @@ package cmdrun
 import (
 	"io/ioutil"
 	"log"
-	"path/filepath"
 
+	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
 )
 
 // MdToTag 输入md，输出md解析后标签
-func MdToTag(in string, parmas types.Parmas) error {
+func MdToTag(in string, parmas model.Parmas) error {
 	// 路径绝对化
-	absIn, err := filepath.Abs(in)
+	absIn, err := tool.Abs(in)
 	if err != nil {
 		log.Println(err)
 		return err

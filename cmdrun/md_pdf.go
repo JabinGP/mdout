@@ -4,18 +4,17 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
+	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
 )
 
 // MdToPdf 输入md，输出pdf
-func MdToPdf(in string, parmas types.Parmas) error {
+func MdToPdf(in string, parmas model.Parmas) error {
 	// 路径绝对化
-	absInSource, err := filepath.Abs(in)
+	absInSource, err := tool.Abs(in)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -43,7 +42,7 @@ func MdToPdf(in string, parmas types.Parmas) error {
 	// 构建临时html文件路径
 	tmpDir, tmpName, _, err := tool.GetDirNameExt(absInSource)
 	tmpExt := "html"
-	tmpFullName, err := filepath.Abs(tmpDir + "/" + "tmp." + tmpName + "." + tmpExt)
+	tmpFullName, err := tool.Abs(tmpDir + "/" + "tmp." + tmpName + "." + tmpExt)
 	if err != nil {
 		log.Println("拼接临时html文件全名错误！", err)
 		return err
@@ -68,7 +67,7 @@ func MdToPdf(in string, parmas types.Parmas) error {
 	chromeTmpURI := strings.Replace(tmpFullName, "#", "%23", -1)
 
 	// 将html文件转换成pdf byte
-	pdfBts, err := parse.Print("file://"+chromeTmpURI, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
+	pdfBts, err := parse.Print(parmas.ExecPath, "file://"+chromeTmpURI, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
 	log.Println("开始保存文件")
 
 	outFullName, err := tool.GetOutFullName(in, parmas)

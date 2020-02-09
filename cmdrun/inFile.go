@@ -3,18 +3,18 @@ package cmdrun
 import (
 	"errors"
 
-	"github.com/JabinGP/mdout/types"
+	"github.com/JabinGP/mdout/model"
 )
 
-func inFileDefault(in string, parmas types.Parmas) error {
+func inFileDefault(in string, parmas model.Parmas) error {
 	return errors.New("识别到文件，但未找到匹配的预设输入文件类型，请检查输入。")
 }
 
-func inFileHTML(in string, parmas types.Parmas) error {
+func inFileHTML(in string, parmas model.Parmas) error {
 	return HTMLToPdf(in, parmas)
 }
 
-func inFileMd(in string, parmas types.Parmas) error {
+func inFileMd(in string, parmas model.Parmas) error {
 	// 输出文件类型分类
 	switch parmas.Type {
 

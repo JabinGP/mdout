@@ -3,17 +3,16 @@ package cmdrun
 import (
 	"io/ioutil"
 	"log"
-	"path/filepath"
 
+	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
 )
 
 // MdToHTML 输入md，输出完整html页面
-func MdToHTML(in string, parmas types.Parmas) error {
+func MdToHTML(in string, parmas model.Parmas) error {
 	// 路径绝对化
-	absIn, err := filepath.Abs(in)
+	absIn, err := tool.Abs(in)
 	if err != nil {
 		log.Println(err)
 		return err

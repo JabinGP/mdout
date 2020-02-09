@@ -7,11 +7,11 @@ import (
 
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
+	"github.com/JabinGP/mdout/model"
 )
 
 // URLToPdf 输入url，输出pdf
-func URLToPdf(in string, parmas types.Parmas) error {
+func URLToPdf(in string, parmas model.Parmas) error {
 	escapedIn := url.QueryEscape(in)
 	outFileName, err := tool.GetOutFullName(escapedIn, parmas)
 	if err != nil {
@@ -20,7 +20,7 @@ func URLToPdf(in string, parmas types.Parmas) error {
 	}
 
 	// 将html文件转换成pdf byte
-	pdfBts, err := parse.Print(in, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
+	pdfBts, err := parse.Print(parmas.ExecPath,in, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
 	if err != nil {
 		log.Println(err)
 		return err

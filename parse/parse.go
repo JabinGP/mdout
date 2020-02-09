@@ -111,14 +111,34 @@ func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 }
 
 // Print 读取对应路径的html，渲染pdf保存到pdfBytes
-func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargin string) (*[]byte, error) {
+func Print(execPath string, htmlPath string, pageFormat string, pageOrientation string, pageMargin string) (*[]byte, error) {
 
 	log.Println("准备开始打印")
 	var pdfBytes []byte
-	// 创建 context
-	ctx, cancel := chromedp.NewContext(context.Background())
-	defer cancel()
-	log.Println("正在加载" + htmlPath)
+	var ctx context.Context
+	if execPath != "" {
+		log.Println("指定执行路径：" + execPath)
+		var cancel1, cancel2 context.CancelFunc
+		// 定义执行路径以及参数
+		opts := []chromedp.ExecAllocatorOption{
+			chromedp.ExecPath(execPath),
+			chromedp.Headless,
+			chromedp.DisableGPU,
+		}
+		// 创建 context
+		allocCtx, cancel1 := chromedp.NewExecAllocator(context.Background(), opts...)
+		defer cancel1()
+		ctx, cancel2 = chromedp.NewContext(allocCtx)
+		defer cancel2()
+	} else {
+		log.Println("未指定执行路径，自动寻找chrome执行路径...")
+		// 创建 context
+		var cancel1 context.CancelFunc
+		ctx, cancel1 = chromedp.NewContext(context.Background())
+		defer cancel1()
+	}
+
+	log.Println("正在加载：" + htmlPath)
 	// chromdp 执行打印任务
 	// 定位到文件
 	err := chromedp.Run(ctx, chromedp.Navigate(htmlPath))
@@ -126,8 +146,8 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 		log.Println(err)
 		return nil, err
 	}
-	log.Println("加载" + htmlPath + "完成")
-	log.Println("正在获取页面渲染状态")
+	log.Println("加载：" + htmlPath + "完成！")
+	log.Println("正在获取页面渲染状态...")
 
 	// err = chromedp.Run(ctx, chromedp.WaitReady(`.markdown-body`))
 	// if err != nil {
@@ -145,7 +165,7 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 
 	if isJabinGP { // 有同步渲染标记
 
-		log.Println("页面支持同步渲染进度，开始同步")
+		log.Println("页面支持同步渲染进度，开始同步！")
 		// 渲染消息
 		var renderInfo string
 		var renderInfoSaved string
@@ -168,11 +188,11 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 			}
 		}
 	} else {
-		log.Println("页面不支持同步渲染进度，跳过同步渲染并打印")
+		log.Println("页面不支持同步渲染进度，跳过同步渲染并打印...")
 	}
 
 	// 打印
-	log.Println("开始打印，正在等待打印机渲染pdf")
+	log.Println("开始打印，正在等待打印机渲染pdf！")
 
 	// 通过尺寸获取宽高
 	paperWidth, paperHeight := getPaperWidthAndHeight(pageFormat)
@@ -182,7 +202,7 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 	marginTop, marginRight, marginBottom, marginLeft, err := getMargin(pageMargin)
 	if err != nil {
 		log.Print(err)
-		log.Println("，将以默认边距打印")
+		log.Println("，将以默认边距打印...")
 	}
 
 	// 开始打印
@@ -213,7 +233,7 @@ func Print(htmlPath string, pageFormat string, pageOrientation string, pageMargi
 		log.Println(err)
 		return nil, err
 	}
-	log.Println("渲染pdf成功，准备保存文件")
+	log.Println("渲染pdf成功，准备保存文件！")
 
 	return &pdfBytes, err
 }
@@ -254,7 +274,7 @@ func splitWidthXHeight(widthXHeight string) (float64, float64) {
 	height, err := strconv.ParseFloat(numberArr[1], 32)
 	if err != nil {
 		log.Println(err)
-		log.Println("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小")
+		log.Println("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小...")
 		return 210, 297
 	}
 	return width, height
@@ -281,7 +301,7 @@ func getMargin(pageMargin string) (float64, float64, float64, float64, error) {
 	// 判断输入类型
 	switch len(marginArr) {
 	case 0:
-		return 1, 1, 1, 1, errors.New("无效的输入边距值")
+		return 1, 1, 1, 1, errors.New("无效的输入边距值！")
 	case 1:
 		marginAll, err := strconv.ParseFloat(marginArr[0], 64)
 		if err != nil {
@@ -294,6 +314,6 @@ func getMargin(pageMargin string) (float64, float64, float64, float64, error) {
 		}
 		return marginAll, marginAll, marginAll, marginAll, nil
 	default:
-		return 1, 1, 1, 1, errors.New("无法识别的输入边距类型")
+		return 1, 1, 1, 1, errors.New("无法识别的输入边距类型！")
 	}
 }

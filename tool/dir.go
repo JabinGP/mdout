@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/JabinGP/mdout/types"
+	"github.com/JabinGP/mdout/model"
 )
 
 // GetHomeDir 返回用户家目录
@@ -60,7 +60,7 @@ func GetType(path string) (string, error) {
 
 // GetDirNameExt 输入文件路径，返回文件夹、文件名、文件拓展名（绝对路径）
 func GetDirNameExt(path string) (string, string, string, error) {
-	absPath, err := filepath.Abs(path)
+	absPath, err := Abs(path)
 	if err != nil {
 		log.Println(err)
 		return "", "", "", err
@@ -76,7 +76,7 @@ func GetDirNameExt(path string) (string, string, string, error) {
 
 // IsDir 返回所给路径是否为一个文件夹
 func IsDir(path string) bool {
-	absPath, err := filepath.Abs(path)
+	absPath, err := Abs(path)
 	if err != nil {
 		log.Println(err)
 		return false
@@ -90,7 +90,7 @@ func IsDir(path string) bool {
 
 // GetOutFullNameFromIn ...
 func GetOutFullNameFromIn(in string, option func(outDir *string, outName *string, outExt *string)) (string, error) {
-	absIn, err := filepath.Abs(in)
+	absIn, err := Abs(in)
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -104,12 +104,12 @@ func GetOutFullNameFromIn(in string, option func(outDir *string, outName *string
 	if option != nil {
 		option(&outDir, &outName, &outExt)
 	}
-	return filepath.Abs(outDir + "/" + outName + outExt)
+	return Abs(outDir + "/" + outName + outExt)
 }
 
 // GetOutFullNameFromOut ...
 func GetOutFullNameFromOut(out string, option func(outDir *string, outName *string, outExt *string)) (string, error) {
-	absOut, err := filepath.Abs(out)
+	absOut, err := Abs(out)
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -124,18 +124,19 @@ func GetOutFullNameFromOut(out string, option func(outDir *string, outName *stri
 		option(&outDir, &outName, &outExt)
 	}
 
-	return filepath.Abs(outDir + "/" + outName + outExt)
+	return Abs(outDir + "/" + outName + outExt)
 }
 
 // GetOutFullName ...
-func GetOutFullName(in string, parmas types.Parmas) (string, error) {
+func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 	var outFullName string
-	absOut, err := filepath.Abs(parmas.Out)
+
+	absOut, err := Abs(parmas.Out)
 	if err != nil {
 		log.Println(err)
 		return "", err
 	}
-
+	log.Println(in, absOut, parmas)
 	if parmas.Out == "" { // 未指定输出位置
 		outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
 			*outExt = "." + parmas.Type
@@ -157,4 +158,15 @@ func GetOutFullName(in string, parmas types.Parmas) (string, error) {
 	}
 
 	return outFullName, nil
+}
+
+// Abs 将开头的~替换为家目录，再进行绝对值化
+func Abs(path string) (string, error) {
+	var tmpPath string
+	if path[0] == '~' {
+		tmpPath = GetHomeDir() + path[1:]
+	} else {
+		tmpPath = path
+	}
+	return filepath.Abs(tmpPath)
 }

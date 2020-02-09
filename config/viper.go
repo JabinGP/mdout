@@ -1,12 +1,12 @@
 package config
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"sync"
 
+	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
 	"github.com/spf13/viper"
 )
 
@@ -42,24 +42,23 @@ func setDefault(v *viper.Viper) {
 func readConfig(v *viper.Viper) {
 	CheckAndInitBasicConfig()
 	if err := v.ReadInConfig(); err == nil {
-		fmt.Println("读取配置文件成功:", v.ConfigFileUsed())
+		log.Println("读取配置文件成功:", v.ConfigFileUsed())
 		ShowConfig(v)
 	} else {
 		log.Printf("读取配置文件失败: %s \n", err)
-		log.Println("将以系统预设值作为参数默认值")
+		panic(err)
 	}
 }
 
 // ShowConfig 输出读取到的配置文件
 func ShowConfig(v *viper.Viper) {
-	confParmas := types.Parmas{}
-	v.UnmarshalKey("Parmas", &confParmas)
+	conf := model.Config{}
+	v.Unmarshal(&conf)
+	confBts, err := json.Marshal(conf)
+	if err != nil {
+		log.Println(err)
+	}
 	log.Println("---这是你的配置文件参数---")
-	log.Printf("输出路径：%s\n", confParmas.Out)
-	log.Printf("输出格式：%s\n", confParmas.Type)
-	log.Printf("选择主题：%s\n", confParmas.Theme)
-	log.Printf("打印页面格式：%s\n", confParmas.PageFormat)
-	log.Printf("打印页面方向：%s\n", confParmas.PageOrientation)
-	log.Printf("打印页面边距：%s\n", confParmas.PageMargin)
-	log.Println("-----------------------")
+	log.Println(string(confBts))
+	log.Println("--------------------------")
 }

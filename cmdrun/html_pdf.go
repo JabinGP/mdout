@@ -3,18 +3,17 @@ package cmdrun
 import (
 	"io/ioutil"
 	"log"
-	"path/filepath"
 	"strings"
 
+	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/JabinGP/mdout/types"
 )
 
 // HTMLToPdf 输入html，输入pdf
-func HTMLToPdf(in string, parmas types.Parmas) error {
+func HTMLToPdf(in string, parmas model.Parmas) error {
 	// 路径绝对化
-	absIn, err := filepath.Abs(in)
+	absIn, err := tool.Abs(in)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -30,7 +29,7 @@ func HTMLToPdf(in string, parmas types.Parmas) error {
 	chromeURI := strings.Replace(absIn, "#", "%23", -1)
 
 	// 将html文件转换成pdf byte
-	pdfBts, err := parse.Print("file://"+chromeURI, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
+	pdfBts, err := parse.Print(parmas.ExecPath, "file://"+chromeURI, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
 	if err != nil {
 		log.Println(err)
 		return err
