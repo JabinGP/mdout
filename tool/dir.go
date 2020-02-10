@@ -162,6 +162,9 @@ func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 
 // Abs 将开头的~替换为家目录，再进行绝对值化
 func Abs(path string) (string, error) {
+	if path == "" {
+		return filepath.Abs(path)
+	}
 	var tmpPath string
 	if path[0] == '~' {
 		tmpPath = GetHomeDir() + path[1:]

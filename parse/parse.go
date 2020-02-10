@@ -3,6 +3,7 @@ package parse
 import (
 	// 输出日志信息
 	"log"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -17,7 +18,7 @@ import (
 	"gitlab.com/golang-commonmark/markdown"
 
 	// 无头chrome api
-	"github.com/JabinGP/mdout/tool"
+	"github.com/JabinGP/mdout/static"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 
@@ -42,18 +43,12 @@ func Md(sourceByteArr []byte) (*[]byte, error) {
 func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 
 	log.Println("开始生成html")
-
-	// 获取用户home目录
-	homeDir := tool.GetHomeDir()
-	if homeDir == "" {
-		return nil, errors.New("获取资源目录失败")
-	}
-
 	// 获取资源文件夹路径
-	var themeDir = homeDir + `/mdout/theme/` + theme
-
-	// 资源文件路径
-	var indexHTMLFullName = themeDir + `/index.html` // html模板
+	var themeDir = filepath.FromSlash(static.ThemeFolderFullName +
+		"/" + theme)
+	// html模板
+	var indexHTMLFullName = filepath.FromSlash(themeDir +
+		"/index.html")
 
 	// 页面模板
 	indexHTMLBytes, err := ioutil.ReadFile(indexHTMLFullName)
@@ -80,8 +75,7 @@ func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 		linkHref, ok := selection.Attr("href") // 获取href属性
 		if ok {                                // 如果获取成功
 			// 替换
-			linkHref = strings.Replace(linkHref, `{{homePath}}`, homeDir, -1)
-			linkHref = strings.Replace(linkHref, `{{theme}}`, theme, -1)
+			linkHref = strings.Replace(linkHref, `{{themePath}}`, filepath.ToSlash(themeDir), -1)
 			// 生效
 			selection.SetAttr("href", linkHref)
 		}
@@ -90,8 +84,7 @@ func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
 		srcPath, ok := selection.Attr("src") // 获取src属性
 		if ok {                              // 如果获取成功
 			// 替换
-			srcPath = strings.Replace(srcPath, `{{homePath}}`, homeDir, -1)
-			srcPath = strings.Replace(srcPath, `{{theme}}`, theme, -1)
+			srcPath = strings.Replace(srcPath, `{{themePath}}`, filepath.ToSlash(themeDir), -1)
 			// 生效
 			selection.SetAttr("src", srcPath)
 		}

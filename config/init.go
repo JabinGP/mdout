@@ -1,56 +1,86 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	"github.com/JabinGP/mdout/model"
+	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/tool"
+	"github.com/spf13/viper"
 )
 
-// CheckAndInitBasicConfig 检查配置文件，并初始化
-func CheckAndInitBasicConfig() {
-	confBytes := []byte(`[Parmas]
-Out = ""                      # 输出路径，一般通过命令行指定
-Type = "pdf"                  # 输出类型默认PDF
-Theme = "github"              # 输出默认主题
-PageFormat = "a4"             # 输出默认尺寸
-PageOrientation = "portrait"  # 输出默认方向
-PageMargin = 0.4              # 输出默认边距
-ExecPath = ""                 # chrome执行文件路径
-[Runtime]
-EditorPath = "code"           # 打开配置文件的编辑器路径或命令`)
+// NewViper 获取一个初始化完成的viper实例
+func initViper() {
+	Viper = viper.New()
+	addConfigPathAndName(Viper)
+	setDefault(Viper)
+	readConfig(Viper)
+}
 
-	confFolderName, err := tool.Abs(tool.GetHomeDir() + "/mdout")
-	if err != nil {
-		log.Println("处理配置文件夹路径失败。")
+func addConfigPathAndName(v *viper.Viper) {
+	// 添加扫描路径
+	v.AddConfigPath(static.ConfigFolderFullName)
+	// 设置配置文件名称
+	v.SetConfigName(static.ConfigFileViperName)
+}
+
+func setDefault(v *viper.Viper) {
+	v.SetDefault("Out", "")
+	v.SetDefault("Type", "pdf")
+	v.SetDefault("Theme", "default")
+	v.SetDefault("PageFormat", "a4")
+	v.SetDefault("PageOrientation", "portrait")
+	v.SetDefault("PageMargin", "0.4")
+}
+
+func readConfig(v *viper.Viper) {
+	if err := v.ReadInConfig(); err == nil {
+		log.Println("读取配置文件成功:", v.ConfigFileUsed())
+		ShowConfig(v)
+	} else {
+		log.Printf("读取配置文件失败: %s \n", err)
 		panic(err)
 	}
-	confFileName, err := tool.Abs(confFolderName + "/conf.toml")
+}
+
+// ShowConfig 输出读取到的配置文件
+func ShowConfig(v *viper.Viper) {
+	conf := model.Config{}
+	v.Unmarshal(&conf)
+	confBts, err := json.Marshal(conf)
 	if err != nil {
-		log.Println("处理配置文件夹文件路径失败。")
-		panic(err)
+		log.Println(err)
 	}
+	log.Println("---这是你的配置文件参数---")
+	log.Println(string(confBts))
+	log.Println("--------------------------")
+}
 
-	if !tool.IsExists(confFileName) {
-		log.Println("配置文件 " + confFileName + " 不存在，创建中...")
+// InitConfigFile 初始化配置文件
+func InitConfigFile() {
+	if !tool.IsExists(static.ConfigFileFullName) {
+		log.Println("配置文件 " + static.ConfigFileFullName + " 不存在，创建中...")
+		confBytes := DownloadConfig("v1")
 
-		if !tool.IsExists(confFolderName) {
-			log.Println("配置文件夹 " + confFolderName + " 不存在，创建中...")
-			err := os.Mkdir(confFolderName, os.ModePerm)
+		if !tool.IsExists(static.ConfigFolderFullName) {
+			log.Println("配置文件夹 " + static.ConfigFolderFullName + " 不存在，创建中...")
+			err := os.Mkdir(static.ConfigFolderFullName, os.ModePerm)
 			if err != nil {
-				fmt.Printf("创建文件夹 " + confFolderName + " 失败!\n")
+				fmt.Printf("创建文件夹 " + static.ConfigFolderFullName + " 失败!\n")
 				panic(err)
 			}
-			fmt.Printf("创建文件夹 " + confFolderName + " 成功!\n")
+			fmt.Printf("创建文件夹 " + static.ConfigFolderFullName + " 成功!\n")
 		}
 
-		err = ioutil.WriteFile(confFileName, confBytes, 0777)
+		err := ioutil.WriteFile(static.ConfigFileFullName, confBytes, 0777)
 		if err != nil {
-			log.Println("创建配置文件 " + confFileName + " 失败，请重新尝试或者手动创建！")
+			log.Println("创建配置文件 " + static.ConfigFileFullName + " 失败，请重新尝试或者手动创建！")
 			panic(err)
 		}
-		log.Println("创建配置文件 " + confFileName + " 成功！")
+		log.Println("创建配置文件 " + static.ConfigFileFullName + " 成功！")
 	}
 }

@@ -28,4 +28,6 @@ type Parmas struct {
 type Runtime struct {
 	// 打开配置文件的编辑器路径或命令
 	EditorPath string
+	// 打开Git的路径或者命令
+	GitPath string
 }

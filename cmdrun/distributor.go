@@ -5,8 +5,8 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/JabinGP/mdout/tool"
 	"github.com/JabinGP/mdout/model"
+	"github.com/JabinGP/mdout/tool"
 )
 
 // Distribute 根据不同的输入类型处理，定位到不同的执行函数

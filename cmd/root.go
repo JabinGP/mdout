@@ -15,6 +15,7 @@ import (
 	// 自定义结构体
 	"github.com/JabinGP/mdout/cmdrun"
 	"github.com/JabinGP/mdout/model"
+	"github.com/JabinGP/mdout/theme"
 
 	// 配置文件读取
 	"github.com/JabinGP/mdout/config"
@@ -59,10 +60,18 @@ func init() {
 	initConfig()
 	initRootFlags()
 	addCommand()
+	initTheme()
+}
+
+func initTheme() {
+	if !theme.CheckTheme("github") {
+		log.Println("默认主题github不存在，开始下载github主题")
+		theme.DownloadTheme("github")
+	}
 }
 
 func initConfig() {
-	v = config.NewViper()
+	v = config.Viper
 	v.Unmarshal(&conf)
 }
 
