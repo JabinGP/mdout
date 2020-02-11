@@ -5,14 +5,13 @@ import (
 	"log"
 	"os/exec"
 
+	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/tool"
 	"github.com/spf13/cobra"
 )
 
-var configCmd *cobra.Command
-
-func init() {
-	configCmd = &cobra.Command{
+func getConfigCmd() *cobra.Command {
+	return &cobra.Command{
 		Use:   "config",
 		Short: "修改配置",
 		Long:  "通过编辑器修改配置文件，默认打开vscode",
@@ -21,7 +20,7 @@ func init() {
 }
 
 func configRunE(cmd *cobra.Command, args []string) error {
-	runtime := conf.Runtime
+	runtime := config.Obj.Runtime
 
 	if runtime.EditorPath == "" {
 		log.Println("未设置编辑器，将使用vscode打开配置文件")

@@ -11,22 +11,24 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/BurntSushi/toml"
 	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/tool"
 	"github.com/JabinGP/mdout/ziper"
-	"github.com/spf13/viper"
 )
 
 // DownloadTheme 从github仓库下载主题文件
 func DownloadTheme(themeName string) error {
+	path := filepath.FromSlash(static.ThemeFolderFullName + "/" + themeName)
+	if tool.IsExists(path) {
+		return errors.New("主题包：" + path + " 已经存在，如需重新下载请删除后重试！")
+	}
 	theme, err := GetTheme(themeName)
 	if err != nil {
-		log.Println("获取主题信息失败！")
 		return err
 	}
-	path := filepath.FromSlash(static.ThemeFolderFullName + "/" + themeName)
 	switch theme.DownloadType {
 	case "zip":
 		err = DownloadThemeByZip(theme, path)
@@ -36,11 +38,10 @@ func DownloadTheme(themeName string) error {
 		err = DownloadThemeByGit(theme, path)
 	}
 	if err != nil {
-		log.Println("获取主题失败！")
 		return err
 	}
 
-	log.Println("获取主题成功，保存在 " + path)
+	log.Println("下载主题成功，保存在 " + path)
 	return nil
 }
 
@@ -109,7 +110,6 @@ func GetTheme(themeName string) (model.Theme, error) {
 	var targetTheme model.Theme
 	themeList, err := DownloadThemeMap()
 	if err != nil {
-		log.Println("获取主题列表失败!")
 		return targetTheme, err
 	}
 	for _, theme := range themeList {
@@ -119,8 +119,7 @@ func GetTheme(themeName string) (model.Theme, error) {
 		}
 	}
 	if targetTheme.Name == "" {
-		log.Println("未找到对应名称的主题！")
-		return targetTheme, errors.New("未找到对应名称的主题！")
+		return targetTheme, errors.New("下载失败，未在主题列表中找到主题：" + themeName)
 	}
 
 	return targetTheme, nil
@@ -129,6 +128,7 @@ func GetTheme(themeName string) (model.Theme, error) {
 // DownloadThemeMap 从github获取所有主题的下载地址
 func DownloadThemeMap() ([]model.Theme, error) {
 	log.Println("正在获取主题列表...")
+	var themeMap model.ThemeMap
 	var mapURL = static.ThemeMapGithubURL
 	var version = static.ThemeVersion
 	mapURL = strings.Replace(mapURL, "{version}", version, 1)
@@ -139,23 +139,20 @@ func DownloadThemeMap() ([]model.Theme, error) {
 		return nil, err
 	}
 	defer mapReso.Body.Close()
-	v := viper.New()
-	v.SetConfigType("toml")
-	err = v.ReadConfig(mapReso.Body)
-	if err != nil {
+	if _, err := toml.DecodeReader(mapReso.Body, &themeMap); err != nil {
 		log.Println("从 " + mapURL + " 读取http响应body失败！")
 		return nil, err
 	}
-	var mapList []model.Theme
-	v.UnmarshalKey("Theme", &mapList)
 	log.Println("从 " + mapURL + " 获取主题列表成功")
-	return mapList, nil
+	return themeMap.ThemeList, nil
 }
 
 // DownloadThemeByGit 使用git clone命令下载主题
 func DownloadThemeByGit(theme model.Theme, path string) error {
-	//themeFolderFullName := filepath.FromSlash(static.ThemeFolderFullName + "/" + theme.Name + "-test")
-	cloneCmd := exec.Command(config.Obj.GitPath, "clone", theme.RepoURL, path)
+	runtime := config.Obj.Runtime
+	gitPath := runtime.GitPath
+	cloneCmd := exec.Command(gitPath, "clone", theme.RepoURL, path)
+
 	// 获取输出对象，可以从该对象中读取输出结果
 	stdout, err := cloneCmd.StdoutPipe()
 	if err != nil {
@@ -164,22 +161,21 @@ func DownloadThemeByGit(theme model.Theme, path string) error {
 	}
 	// 保证关闭输出流
 	defer stdout.Close()
-
+	defer func() {
+		// 读取输出结果
+		opBytes, err := ioutil.ReadAll(stdout)
+		if err != nil {
+			return
+		}
+		opString := string(opBytes)
+		if opString != "" {
+			log.Println(opString)
+		}
+	}()
 	// 运行命令
-	log.Println("执行命令 " + config.Obj.GitPath + " clone " + theme.RepoURL + " " + path)
-	if err := cloneCmd.Start(); err != nil {
-		log.Println(err)
+	log.Println("执行命令 " + gitPath + " clone " + theme.RepoURL + " " + path)
+	if err := cloneCmd.Run(); err != nil {
 		return err
-	}
-	// 读取输出结果
-	opBytes, err := ioutil.ReadAll(stdout)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	opString := string(opBytes)
-	if opString != "" {
-		log.Println(opString)
 	}
 	return nil
 }

@@ -7,51 +7,21 @@ import (
 	"log"
 	"os"
 
-	"github.com/JabinGP/mdout/model"
+	"github.com/BurntSushi/toml"
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/tool"
-	"github.com/spf13/viper"
 )
 
-// NewViper 获取一个初始化完成的viper实例
-func initViper() {
-	Viper = viper.New()
-	addConfigPathAndName(Viper)
-	setDefault(Viper)
-	readConfig(Viper)
-}
-
-func addConfigPathAndName(v *viper.Viper) {
-	// 添加扫描路径
-	v.AddConfigPath(static.ConfigFolderFullName)
-	// 设置配置文件名称
-	v.SetConfigName(static.ConfigFileViperName)
-}
-
-func setDefault(v *viper.Viper) {
-	v.SetDefault("Out", "")
-	v.SetDefault("Type", "pdf")
-	v.SetDefault("Theme", "default")
-	v.SetDefault("PageFormat", "a4")
-	v.SetDefault("PageOrientation", "portrait")
-	v.SetDefault("PageMargin", "0.4")
-}
-
-func readConfig(v *viper.Viper) {
-	if err := v.ReadInConfig(); err == nil {
-		log.Println("读取配置文件成功:", v.ConfigFileUsed())
-		ShowConfig(v)
-	} else {
-		log.Printf("读取配置文件失败: %s \n", err)
+func readConfig() {
+	if _, err := toml.DecodeFile(static.ConfigFileFullName, &Obj); err != nil {
+		log.Println("读取配置文件失败！", err)
 		panic(err)
 	}
 }
 
 // ShowConfig 输出读取到的配置文件
-func ShowConfig(v *viper.Viper) {
-	conf := model.Config{}
-	v.Unmarshal(&conf)
-	confBts, err := json.Marshal(conf)
+func ShowConfig() {
+	confBts, err := json.Marshal(Obj)
 	if err != nil {
 		log.Println(err)
 	}

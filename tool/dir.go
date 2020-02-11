@@ -136,7 +136,7 @@ func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 		log.Println(err)
 		return "", err
 	}
-	log.Println(in, absOut, parmas)
+
 	if parmas.Out == "" { // 未指定输出位置
 		outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
 			*outExt = "." + parmas.Type

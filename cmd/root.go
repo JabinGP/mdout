@@ -1,32 +1,18 @@
 package cmd
 
 import (
-	// 日志
 	"log"
-
-	// 获取系统路径信息
 	"os"
-	// 命令行框架
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
-	// 命令执行函数
-
-	// 自定义结构体
 	"github.com/JabinGP/mdout/cmdrun"
-	"github.com/JabinGP/mdout/model"
-	"github.com/JabinGP/mdout/theme"
-
-	// 配置文件读取
 	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/model"
+	"github.com/spf13/cobra"
 )
 
 var (
-	v *viper.Viper
 	// 命令行输入参数，与cobra命令行绑定
 	cmdParmas model.Parmas
-	// 配置文件参数
-	conf model.Config
 	// 根命令
 	rootCmd = &cobra.Command{
 		Use:     "mdout",
@@ -57,27 +43,12 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 
 // init 包初始化
 func init() {
-	initConfig()
 	initRootFlags()
 	addCommand()
-	initTheme()
 }
-
-func initTheme() {
-	if !theme.CheckTheme("github") {
-		log.Println("默认主题github不存在，开始下载github主题")
-		theme.DownloadTheme("github")
-	}
-}
-
-func initConfig() {
-	v = config.Viper
-	v.Unmarshal(&conf)
-}
-
 func initRootFlags() {
 	rootFlags := rootCmd.Flags()
-	confParmas := conf.Parmas
+	confParmas := config.Obj.Parmas
 
 	// 添加Flags：变量 长名 短名 默认值 帮助说明
 	rootFlags.StringVarP(&cmdParmas.Out, "outpath", "o", confParmas.Out, "文件输出的路径")
@@ -90,8 +61,9 @@ func initRootFlags() {
 }
 
 func addCommand() {
-	rootCmd.AddCommand(installCmd)
-	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(getInstallCmd())
+	rootCmd.AddCommand(getConfigCmd())
+	rootCmd.AddCommand(getServeCmd())
 }
 
 // 输出参数信息调试

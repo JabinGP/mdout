@@ -1,32 +1,21 @@
 package parse
 
 import (
-	// 输出日志信息
+	"bytes"
+	"context"
+	"errors"
+	"io/ioutil"
 	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	// 生成错误
-	"errors"
-
-	// i/o相关
-	"bytes"
-	"io/ioutil" // 读写文件
-
-	// markdown 解析为tag标签
-	"gitlab.com/golang-commonmark/markdown"
-
-	// 无头chrome api
 	"github.com/JabinGP/mdout/static"
+	"github.com/JabinGP/mdout/theme"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
-
-	// 上下文关系，用于chromedp
-	"context"
-
-	// go语言的JQuery，用于html模板拼接
-	"github.com/PuerkitoBio/goquery"
+	"gitlab.com/golang-commonmark/markdown"
 )
 
 // Md 将源文件字节流转为html标签字节流
@@ -40,12 +29,17 @@ func Md(sourceByteArr []byte) (*[]byte, error) {
 }
 
 // AssembleTag 将标签拼接为完整的，可独立渲染的html（不依赖外部css，js文件）
-func AssembleTag(theme string, tagBytes *[]byte) (*[]byte, error) {
-
+func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
+	if !theme.CheckTheme(themeName) {
+		err := theme.DownloadTheme(themeName)
+		if err != nil {
+			return nil, err
+		}
+	}
 	log.Println("开始生成html")
 	// 获取资源文件夹路径
 	var themeDir = filepath.FromSlash(static.ThemeFolderFullName +
-		"/" + theme)
+		"/" + themeName)
 	// html模板
 	var indexHTMLFullName = filepath.FromSlash(themeDir +
 		"/index.html")
@@ -139,7 +133,7 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 		log.Println(err)
 		return nil, err
 	}
-	log.Println("加载：" + htmlPath + "完成！")
+	log.Println("加载：" + htmlPath + " 完成！")
 	log.Println("正在获取页面渲染状态...")
 
 	// err = chromedp.Run(ctx, chromedp.WaitReady(`.markdown-body`))

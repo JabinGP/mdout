@@ -2,8 +2,8 @@ package model
 
 // Config 配置文件对应实体
 type Config struct {
-	Parmas
-	Runtime
+	Parmas  Parmas
+	Runtime Runtime
 }
 
 // Parmas 用户输入参数
