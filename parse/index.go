@@ -117,7 +117,7 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 		ctx, cancel2 = chromedp.NewContext(allocCtx)
 		defer cancel2()
 	} else {
-		log.Debugln("未指定执行路径，自动寻找chrome执行路径...")
+		log.Debugln("未指定执行路径，自动寻找chrome执行路径")
 		// 创建 context
 		var cancel1 context.CancelFunc
 		ctx, cancel1 = chromedp.NewContext(context.Background())
@@ -171,11 +171,11 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 			}
 		}
 	} else {
-		log.Infoln("页面不支持同步渲染进度，跳过同步渲染并打印")
+		log.Infoln("页面不支持同步渲染进度，跳过同步渲染并打印pdf")
 	}
 
 	// 打印
-	log.Infoln("开始打印，正在等待渲染pdf！")
+	log.Infoln("正在生成pdf...")
 
 	// 通过尺寸获取宽高
 	paperWidth, paperHeight := getPaperWidthAndHeight(pageFormat)
@@ -185,7 +185,7 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 	marginTop, marginRight, marginBottom, marginLeft, err := getMargin(pageMargin)
 	if err != nil {
 		log.Errorln(err)
-		log.Infoln("转换页面边距出错，将以默认边距打印...")
+		log.Infoln("转换页面边距出错，将以默认边距打印")
 	}
 
 	// 开始打印
@@ -215,7 +215,7 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 	if err != nil {
 		return nil, err
 	}
-	log.Infoln("渲染pdf成功，准备保存文件！")
+	log.Infoln("生成pdf成功，准备保存文件")
 	return &pdfBytes, err
 }
 
@@ -255,7 +255,7 @@ func splitWidthXHeight(widthXHeight string) (float64, float64) {
 	height, err := strconv.ParseFloat(numberArr[1], 32)
 	if err != nil {
 		log.Errorln(err)
-		log.Errorln("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小...")
+		log.Errorln("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小")
 		return 210, 297
 	}
 	return width, height

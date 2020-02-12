@@ -1,7 +1,7 @@
 package tool
 
 import (
-	"log"
+	"errors"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -45,7 +45,6 @@ func GetType(path string) (string, error) {
 	urlRegexp := `(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?`
 	match, err := regexp.MatchString(urlRegexp, path)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 
@@ -62,7 +61,6 @@ func GetType(path string) (string, error) {
 func GetDirNameExt(path string) (string, string, string, error) {
 	absPath, err := Abs(path)
 	if err != nil {
-		log.Println(err)
 		return "", "", "", err
 	}
 	dir := filepath.Dir(absPath)
@@ -78,7 +76,6 @@ func GetDirNameExt(path string) (string, string, string, error) {
 func IsDir(path string) bool {
 	absPath, err := Abs(path)
 	if err != nil {
-		log.Println(err)
 		return false
 	}
 	fi, err := os.Stat(absPath)
@@ -92,13 +89,11 @@ func IsDir(path string) bool {
 func GetOutFullNameFromIn(in string, option func(outDir *string, outName *string, outExt *string)) (string, error) {
 	absIn, err := Abs(in)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 
 	outDir, outName, outExt, err := GetDirNameExt(absIn)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 	if option != nil {
@@ -111,13 +106,11 @@ func GetOutFullNameFromIn(in string, option func(outDir *string, outName *string
 func GetOutFullNameFromOut(out string, option func(outDir *string, outName *string, outExt *string)) (string, error) {
 	absOut, err := Abs(out)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 
 	outDir, outName, outExt, err := GetDirNameExt(absOut)
 	if err != nil {
-		log.Println(err)
 		return "", err
 	}
 	if option != nil {
@@ -133,8 +126,7 @@ func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 
 	absOut, err := Abs(parmas.Out)
 	if err != nil {
-		log.Println(err)
-		return "", err
+		return "", errors.New("获取输出路径失败：" + err.Error())
 	}
 
 	if parmas.Out == "" { // 未指定输出位置
@@ -153,8 +145,7 @@ func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 	}
 
 	if err != nil {
-		log.Println(err)
-		return "", err
+		return "", errors.New("获取输出路径失败：" + err.Error())
 	}
 
 	return outFullName, nil
@@ -171,5 +162,11 @@ func Abs(path string) (string, error) {
 	} else {
 		tmpPath = path
 	}
-	return filepath.Abs(tmpPath)
+
+	absPath, err := filepath.Abs(tmpPath)
+	if err != nil {
+		return "", errors.New("绝对化路径 " + tmpPath + " 失败：" + err.Error())
+	}
+
+	return absPath, nil
 }

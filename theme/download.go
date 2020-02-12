@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -23,7 +22,9 @@ import (
 func DownloadTheme(themeName string) error {
 	path := filepath.FromSlash(static.ThemeFolderFullName + "/" + themeName)
 	if tool.IsExists(path) {
-		return errors.New("主题包：" + path + " 已经存在，如需重新下载请删除后重试！")
+		err := errors.New("主题包：" + path + " 已经存在，如需重新下载请删除后重试！")
+		log.Errorln(err)
+		return err
 	}
 	theme, err := GetTheme(themeName)
 	if err != nil {
@@ -38,10 +39,11 @@ func DownloadTheme(themeName string) error {
 		err = DownloadThemeByGit(theme, path)
 	}
 	if err != nil {
+		log.Errorln(err)
 		return err
 	}
 
-	log.Println("下载主题成功，保存在 " + path)
+	log.Infoln("下载主题成功，保存在 " + path)
 	return nil
 }
 
@@ -53,28 +55,24 @@ func DownloadThemeByZip(theme model.Theme, path string) error {
 	// 打开文件
 	file, err := os.Create(themeZipFileFullName)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	defer file.Close()
 	defer func() {
-		log.Println("开始删除临时压缩文件 " + themeZipFileFullName)
-
 		if tool.IsExists(themeZipFileFullName) {
-			log.Println("文件存在，正在删除 " + themeZipFileFullName)
+			log.Debugln("开始删除临时压缩文件 " + themeZipFileFullName)
 			err := os.Remove(themeZipFileFullName)
 			if err != nil {
-				log.Println("删除文件 " + themeZipFileFullName + "失败，但不会影响使用，可以手动删除")
-				log.Println(err)
+				log.Errorln("删除文件 " + themeZipFileFullName + "失败，但不会影响使用，可以手动删除！")
+				log.Errorln(err)
 			}
 		}
-		log.Println("删除 " + themeZipFileFullName + "成功")
+		log.Debugln("删除 " + themeZipFileFullName + "成功")
 	}()
 
 	// 从url获取资源
 	urlFileResp, err := http.Get(themeZipURL)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	defer urlFileResp.Body.Close()
@@ -82,26 +80,25 @@ func DownloadThemeByZip(theme model.Theme, path string) error {
 	// 将获取资源复制到文件
 	_, err = io.Copy(file, urlFileResp.Body)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	// 复制完成，关闭文件
 	file.Close()
 	urlFileResp.Body.Close()
 
-	log.Println("下载主题压缩包成功，保存到" + themeZipFileFullName)
-	log.Println("开始解压")
+	log.Debugln("下载主题压缩包成功，保存到" + themeZipFileFullName)
+	log.Debugln("开始解压")
 
 	// 解压缩主题文件
 	err = ziper.UnZip(themeZipFileFullName, path)
 	if err != nil {
-		log.Println("解压失败")
-		log.Println(err)
+		log.Errorln("解压失败")
+		log.Errorln(err)
 		return err
 	}
-	log.Println("解压成功，解压到" + path)
+	log.Debugln("解压成功，解压到" + path)
 
-	log.Println("成功下载 " + themeName + " 主题到 " + path)
+	log.Infoln("成功下载 " + themeName + " 主题到 " + path)
 	return nil
 }
 
@@ -127,7 +124,7 @@ func GetTheme(themeName string) (model.Theme, error) {
 
 // DownloadThemeMap 从github获取所有主题的下载地址
 func DownloadThemeMap() ([]model.Theme, error) {
-	log.Println("正在获取主题列表...")
+	log.Debugln("正在获取主题列表...")
 	var themeMap model.ThemeMap
 	var mapURL = static.ThemeMapGithubURL
 	var version = static.ThemeVersion
@@ -135,15 +132,13 @@ func DownloadThemeMap() ([]model.Theme, error) {
 
 	mapReso, err := http.Get(mapURL)
 	if err != nil {
-		log.Println("对 " + mapURL + " 发起http请求失败！")
 		return nil, err
 	}
 	defer mapReso.Body.Close()
 	if _, err := toml.DecodeReader(mapReso.Body, &themeMap); err != nil {
-		log.Println("从 " + mapURL + " 读取http响应body失败！")
 		return nil, err
 	}
-	log.Println("从 " + mapURL + " 获取主题列表成功")
+	log.Debugln("从 " + mapURL + " 获取主题列表成功")
 	return themeMap.ThemeList, nil
 }
 
@@ -156,7 +151,6 @@ func DownloadThemeByGit(theme model.Theme, path string) error {
 	// 获取输出对象，可以从该对象中读取输出结果
 	stdout, err := cloneCmd.StdoutPipe()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	// 保证关闭输出流
@@ -169,11 +163,11 @@ func DownloadThemeByGit(theme model.Theme, path string) error {
 		}
 		opString := string(opBytes)
 		if opString != "" {
-			log.Println(opString)
+			log.Infoln(opString)
 		}
 	}()
 	// 运行命令
-	log.Println("执行命令 " + gitPath + " clone " + theme.RepoURL + " " + path)
+	log.Debugln("执行命令 " + gitPath + " clone " + theme.RepoURL + " " + path)
 	if err := cloneCmd.Run(); err != nil {
 		return err
 	}

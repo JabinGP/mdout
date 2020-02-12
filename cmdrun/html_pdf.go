@@ -2,7 +2,6 @@ package cmdrun
 
 import (
 	"io/ioutil"
-	"log"
 	"strings"
 
 	"github.com/JabinGP/mdout/model"
@@ -15,13 +14,11 @@ func HTMLToPdf(in string, parmas model.Parmas) error {
 	// 路径绝对化
 	absIn, err := tool.Abs(in)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
 	outFileName, err := tool.GetOutFullName(in, parmas)
 	if err != nil {
-		log.Println("获取输出路径失败！", err)
 		return err
 	}
 
@@ -31,18 +28,16 @@ func HTMLToPdf(in string, parmas model.Parmas) error {
 	// 将html文件转换成pdf byte
 	pdfBts, err := parse.Print(parmas.ExecPath, "file://"+chromeURI, parmas.PageFormat, parmas.PageOrientation, parmas.PageMargin)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
 	// 将得到的pdf byte写入文件
 	err = ioutil.WriteFile(outFileName, *pdfBts, 0644)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
 	// 输出成功信息
-	log.Println("成功保存pdf文件在：" + outFileName)
+	log.Infof("成功保存pdf文件在：%s", outFileName)
 	return nil
 }

@@ -3,7 +3,6 @@ package ziper
 import (
 	"archive/zip"
 	"io"
-	"log"
 	"os"
 	"strings"
 )
@@ -25,17 +24,10 @@ func UnZip(zipFile string, dest string) (err error) {
 	defer reader.Close()
 
 	for _, file := range reader.File {
-		//    log.Println(file.Name)
-
 		if file.FileInfo().IsDir() {
-
-			err := os.MkdirAll(dest+"/"+file.Name, 0755)
-			if err != nil {
-				log.Println(err)
-			}
+			os.MkdirAll(dest+"/"+file.Name, 0755)
 			continue
 		} else {
-
 			err = os.MkdirAll(getDir(dest+"/"+file.Name), 0755)
 			if err != nil {
 				return err
@@ -64,8 +56,6 @@ func UnZip(zipFile string, dest string) (err error) {
 		if err != nil {
 			return err
 		}
-		//w.Close()
-		//rc.Close()
 	}
 	return
 }

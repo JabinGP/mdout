@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"log"
+	"github.com/JabinGP/mdout/tool"
 	"os"
 
 	"github.com/JabinGP/mdout/cmdrun"
@@ -11,6 +11,7 @@ import (
 )
 
 var (
+	log = config.PublicLogger
 	// 命令行输入参数，与cobra命令行绑定
 	cmdParmas model.Parmas
 	// 根命令
@@ -27,13 +28,17 @@ var (
 // Execute 程序执行入口
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Println(err)
+		log.Errorf("%v", err)
 		os.Exit(1)
 	}
 }
 
 // 根目录运行函数
 func rootRunE(cmd *cobra.Command, args []string) error {
+	if cmdParmas.Verbose {
+		level, _ := tool.TransformToLogrusLevel("debug")
+		log.SetStdoutLevel(level)
+	}
 	// 输出参数
 	showParams()
 	// 获取用户输入路径
@@ -58,6 +63,7 @@ func initRootFlags() {
 	rootFlags.StringVarP(&cmdParmas.PageOrientation, "orientation", "r", confParmas.PageOrientation, "打印的页面方向,可选portrait（纵向）、landscape（横向）")
 	rootFlags.StringVarP(&cmdParmas.PageMargin, "margin", "m", confParmas.PageMargin, "打印的页面边距大小，以英寸为单位")
 	rootFlags.StringVarP(&cmdParmas.ExecPath, "exec-path", "p", confParmas.ExecPath, "Chrome的执行路径")
+	rootFlags.BoolVarP(&cmdParmas.Verbose, "verbose", "v", false, "控制台输出详细日志")
 }
 
 func addCommand() {
@@ -68,13 +74,13 @@ func addCommand() {
 
 // 输出参数信息调试
 func showParams() {
-	log.Println("---这是你的合计输入参数---")
-	log.Printf("输出路径：%s\n", cmdParmas.Out)
-	log.Printf("输出格式：%s\n", cmdParmas.Type)
-	log.Printf("选择主题：%s\n", cmdParmas.Theme)
-	log.Printf("打印页面格式：%s\n", cmdParmas.PageFormat)
-	log.Printf("打印页面方向：%s\n", cmdParmas.PageOrientation)
-	log.Printf("打印页面边距：%s\n", cmdParmas.PageMargin)
-	log.Printf("Chrome的执行路径：%s\n", cmdParmas.ExecPath)
-	log.Println("--------------------------")
+	log.Debugf("---这是你的合计输入参数---")
+	log.Debugf("输出路径：%s\n", cmdParmas.Out)
+	log.Debugf("输出格式：%s\n", cmdParmas.Type)
+	log.Debugf("选择主题：%s\n", cmdParmas.Theme)
+	log.Debugf("打印页面格式：%s\n", cmdParmas.PageFormat)
+	log.Debugf("打印页面方向：%s\n", cmdParmas.PageOrientation)
+	log.Debugf("打印页面边距：%s\n", cmdParmas.PageMargin)
+	log.Debugf("Chrome的执行路径：%s\n", cmdParmas.ExecPath)
+	log.Debugf("--------------------------")
 }

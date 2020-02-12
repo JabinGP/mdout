@@ -2,7 +2,6 @@ package cmdrun
 
 import (
 	"errors"
-	"log"
 	"path/filepath"
 
 	"github.com/JabinGP/mdout/model"
@@ -14,7 +13,7 @@ func Distribute(in string, parmas model.Parmas) error {
 	// 获取输入参数类型
 	inType, err := tool.GetType(in)
 	if err != nil {
-		log.Println(err)
+		log.Errorln(err)
 		return err
 	}
 

@@ -22,6 +22,8 @@ type Parmas struct {
 	PageMargin string
 	// 指定Chrome程序执行路径
 	ExecPath string
+	// 临时设置日志等级为"debug"
+	Verbose bool
 }
 
 // Runtime ...
@@ -30,4 +32,8 @@ type Runtime struct {
 	EditorPath string
 	// 打开Git的路径或者命令
 	GitPath string
+	// 控制台输出日志等级
+	StdoutLogLevel string
+	// 文件记录日志等级
+	FileLogLevel string
 }

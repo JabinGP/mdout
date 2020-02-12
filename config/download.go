@@ -2,7 +2,6 @@ package config
 
 import (
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 
@@ -15,15 +14,15 @@ func DownloadConfig(version string) []byte {
 	configURL = strings.Replace(configURL, "{version}", version, 1)
 	configReso, err := http.Get(configURL)
 	if err != nil {
-		log.Println("从 " + configURL + " 下载配置文件失败！")
+		PublicLogger.Errorln("从 " + configURL + " 下载配置文件失败！")
 		panic(err)
 	}
 	defer configReso.Body.Close()
-	log.Println("从 " + configURL + " 下载配置文件成功！")
 	configBts, err := ioutil.ReadAll(configReso.Body)
 	if err != nil {
-		log.Println("从 " + configURL + " 下载配置文件成功，但读取内容失败！")
+		PublicLogger.Errorln("从 " + configURL + " 读取响应内容失败！")
 		panic(err)
 	}
+	PublicLogger.Infoln("从 " + configURL + " 下载配置文件成功！")
 	return configBts
 }
