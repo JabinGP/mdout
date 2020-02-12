@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"github.com/JabinGP/mdout/config"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -18,13 +18,15 @@ import (
 	"gitlab.com/golang-commonmark/markdown"
 )
 
+var log = config.PublicLogger
+
 // Md 将源文件字节流转为html标签字节流
 func Md(sourceByteArr []byte) (*[]byte, error) {
-	log.Println("开始解析markdown")
+	log.Debugln("开始解析markdown...")
 	// 将输入的源md文件解析为html标签，存在[]byte中
 	md := markdown.New(markdown.XHTMLOutput(true))
 	tagByteArr := []byte(md.RenderToString(sourceByteArr))
-	log.Println("解析markdown成功")
+	log.Debugln("解析markdown成功")
 	return &tagByteArr, nil
 }
 
@@ -36,7 +38,7 @@ func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
 			return nil, err
 		}
 	}
-	log.Println("开始生成html")
+	log.Debugln("开始生成html...")
 	// 获取资源文件夹路径
 	var themeDir = filepath.FromSlash(static.ThemeFolderFullName +
 		"/" + themeName)
@@ -47,7 +49,6 @@ func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
 	// 页面模板
 	indexHTMLBytes, err := ioutil.ReadFile(indexHTMLFullName)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
@@ -57,7 +58,6 @@ func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
 	// 获取HtmlDocument对象
 	indexHTMLDoc, err := goquery.NewDocumentFromReader(indexHTMLReader)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
@@ -87,24 +87,23 @@ func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
 	// 获取拼接后的html字符串
 	assembledHTML, err := indexHTMLDoc.Html()
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
 	// 构建byte数组
 	assembledHTMLBytes := []byte(assembledHTML)
-	log.Println("成功生成html")
+	log.Debugln("成功生成html")
 	return &assembledHTMLBytes, nil
 }
 
 // Print 读取对应路径的html，渲染pdf保存到pdfBytes
 func Print(execPath string, htmlPath string, pageFormat string, pageOrientation string, pageMargin string) (*[]byte, error) {
 
-	log.Println("准备开始打印")
+	log.Debugln("准备开始打印...")
 	var pdfBytes []byte
 	var ctx context.Context
 	if execPath != "" {
-		log.Println("指定执行路径：" + execPath)
+		log.Debugln("指定执行路径：" + execPath)
 		var cancel1, cancel2 context.CancelFunc
 		// 定义执行路径以及参数
 		opts := []chromedp.ExecAllocatorOption{
@@ -118,23 +117,22 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 		ctx, cancel2 = chromedp.NewContext(allocCtx)
 		defer cancel2()
 	} else {
-		log.Println("未指定执行路径，自动寻找chrome执行路径...")
+		log.Debugln("未指定执行路径，自动寻找chrome执行路径...")
 		// 创建 context
 		var cancel1 context.CancelFunc
 		ctx, cancel1 = chromedp.NewContext(context.Background())
 		defer cancel1()
 	}
 
-	log.Println("正在加载：" + htmlPath)
+	log.Debugln("正在加载：" + htmlPath + " ...")
 	// chromdp 执行打印任务
 	// 定位到文件
 	err := chromedp.Run(ctx, chromedp.Navigate(htmlPath))
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
-	log.Println("加载：" + htmlPath + " 完成！")
-	log.Println("正在获取页面渲染状态...")
+	log.Debugln("加载：" + htmlPath + " 完成")
+	log.Debugln("正在获取页面渲染状态...")
 
 	// err = chromedp.Run(ctx, chromedp.WaitReady(`.markdown-body`))
 	// if err != nil {
@@ -146,13 +144,12 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 	// eval是下策，因为官方的查找元素api都无法在元素不存在的时候正常运行，会一直卡住
 	err = chromedp.Run(ctx, chromedp.Evaluate(`document.querySelector("#jabingp")!=null`, &isJabinGP))
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 
 	if isJabinGP { // 有同步渲染标记
 
-		log.Println("页面支持同步渲染进度，开始同步！")
+		log.Infoln("页面支持同步渲染进度，开始同步...")
 		// 渲染消息
 		var renderInfo string
 		var renderInfoSaved string
@@ -162,24 +159,23 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 			renderInfoSaved = renderInfo
 			err = chromedp.Run(ctx, chromedp.InnerHTML(`#jabingp`, &renderInfo, chromedp.ByID))
 			if err != nil {
-				log.Println(err)
 				return nil, err
 			}
 
 			// 消息去重
 			if renderInfoSaved != renderInfo {
-				log.Println(renderInfo)
+				log.Infoln(renderInfo)
 			}
 			if renderInfo == "渲染完成！" {
 				break
 			}
 		}
 	} else {
-		log.Println("页面不支持同步渲染进度，跳过同步渲染并打印...")
+		log.Infoln("页面不支持同步渲染进度，跳过同步渲染并打印")
 	}
 
 	// 打印
-	log.Println("开始打印，正在等待打印机渲染pdf！")
+	log.Infoln("开始打印，正在等待渲染pdf！")
 
 	// 通过尺寸获取宽高
 	paperWidth, paperHeight := getPaperWidthAndHeight(pageFormat)
@@ -188,8 +184,8 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 	// 获取页面边距
 	marginTop, marginRight, marginBottom, marginLeft, err := getMargin(pageMargin)
 	if err != nil {
-		log.Print(err)
-		log.Println("，将以默认边距打印...")
+		log.Errorln(err)
+		log.Infoln("转换页面边距出错，将以默认边距打印...")
 	}
 
 	// 开始打印
@@ -217,11 +213,9 @@ func Print(execPath string, htmlPath string, pageFormat string, pageOrientation 
 	}),
 	)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
-	log.Println("渲染pdf成功，准备保存文件！")
-
+	log.Infoln("渲染pdf成功，准备保存文件！")
 	return &pdfBytes, err
 }
 
@@ -260,8 +254,8 @@ func splitWidthXHeight(widthXHeight string) (float64, float64) {
 	width, err := strconv.ParseFloat(numberArr[0], 32)
 	height, err := strconv.ParseFloat(numberArr[1], 32)
 	if err != nil {
-		log.Println(err)
-		log.Println("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小...")
+		log.Errorln(err)
+		log.Errorln("建立" + widthXHeight + "纸张尺寸表时类型转换失败，将尺寸定位A4纸210cm*297cm大小...")
 		return 210, 297
 	}
 	return width, height
