@@ -12,6 +12,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/tool"

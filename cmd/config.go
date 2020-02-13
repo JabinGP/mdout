@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/tool"
 )
 

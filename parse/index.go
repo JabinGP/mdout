@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/JabinGP/mdout/config"
 	"io/ioutil"
 	"path/filepath"
 	"strconv"
 	"strings"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/theme"
 	"github.com/PuerkitoBio/goquery"
@@ -17,8 +17,6 @@ import (
 	"github.com/chromedp/chromedp"
 	"gitlab.com/golang-commonmark/markdown"
 )
-
-var log = config.PublicLogger
 
 // Md 将源文件字节流转为html标签字节流
 func Md(sourceByteArr []byte) (*[]byte, error) {

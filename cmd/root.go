@@ -1,17 +1,18 @@
 package cmd
 
 import (
-	"github.com/JabinGP/mdout/tool"
 	"os"
+
+	"github.com/JabinGP/mdout/tool"
 
 	"github.com/JabinGP/mdout/cmdrun"
 	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
 	"github.com/spf13/cobra"
 )
 
 var (
-	log = config.PublicLogger
 	// 命令行输入参数，与cobra命令行绑定
 	cmdParmas model.Parmas
 	// 根命令
@@ -50,6 +51,20 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 func init() {
 	initRootFlags()
 	addCommand()
+	setLoggerLevel()
+}
+
+func setLoggerLevel() {
+	stdoutLevel, err := tool.TransformToLogrusLevel(config.Obj.Runtime.StdoutLogLevel)
+	if err != nil {
+		panic(err)
+	}
+	fileLevel, err := tool.TransformToLogrusLevel(config.Obj.Runtime.FileLogLevel)
+	if err != nil {
+		panic(err)
+	}
+	log.SetStdoutLevel(stdoutLevel)
+	log.SetFileLevel(fileLevel)
 }
 func initRootFlags() {
 	rootFlags := rootCmd.Flags()

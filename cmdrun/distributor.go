@@ -4,6 +4,7 @@ import (
 	"errors"
 	"path/filepath"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/tool"
 )

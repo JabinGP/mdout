@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/url"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"

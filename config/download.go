@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/static"
 )
 
@@ -14,15 +15,15 @@ func DownloadConfig(version string) []byte {
 	configURL = strings.Replace(configURL, "{version}", version, 1)
 	configReso, err := http.Get(configURL)
 	if err != nil {
-		PublicLogger.Errorln("从 " + configURL + " 下载配置文件失败！")
+		log.Errorln("从 " + configURL + " 下载配置文件失败！")
 		panic(err)
 	}
 	defer configReso.Body.Close()
 	configBts, err := ioutil.ReadAll(configReso.Body)
 	if err != nil {
-		PublicLogger.Errorln("从 " + configURL + " 读取响应内容失败！")
+		log.Errorln("从 " + configURL + " 读取响应内容失败！")
 		panic(err)
 	}
-	PublicLogger.Infoln("从 " + configURL + " 下载配置文件成功！")
+	log.Infoln("从 " + configURL + " 下载配置文件成功！")
 	return configBts
 }

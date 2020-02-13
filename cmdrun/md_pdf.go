@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
 	"github.com/JabinGP/mdout/parse"
 	"github.com/JabinGP/mdout/tool"
