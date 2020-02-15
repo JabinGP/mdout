@@ -1,11 +1,13 @@
 package cmd
 
 import (
+	"errors"
 	"os"
+
+	"github.com/JabinGP/mdout/parse"
 
 	"github.com/JabinGP/mdout/tool"
 
-	"github.com/JabinGP/mdout/cmdrun"
 	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
@@ -26,6 +28,13 @@ var (
 	}
 )
 
+// init 包初始化
+func init() {
+	initRootFlags()
+	addCommand()
+	setLoggerLevel()
+}
+
 // Execute 程序执行入口
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
@@ -43,15 +52,66 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 	// 输出参数
 	showParams()
 	// 获取用户输入路径
-	in := args[0]
-	return cmdrun.Distribute(in, cmdParmas)
+	inPath := args[0]
+
+	return distribute(inPath, cmdParmas)
 }
 
-// init 包初始化
-func init() {
-	initRootFlags()
-	addCommand()
-	setLoggerLevel()
+func distribute(inPath string, cmdParmas model.Parmas) error {
+	// 获取输入参数类型
+	inType, err := tool.GetType(inPath)
+	if err != nil {
+		log.Errorln(err)
+		return err
+	}
+
+	// 根据不同的输入类型处理，定位到不同的执行函数
+	switch inType {
+	case "url":
+		return inURL(inPath, cmdParmas)
+	default:
+		return inFile(inPath, cmdParmas)
+	}
+}
+
+func inURL(inPath string, cmdParmas model.Parmas) error {
+	req, err := parse.NewURLRequest(inPath, cmdParmas)
+	if err != nil {
+		return err
+	}
+
+	bts, err := req.GetBts()
+	if err != nil {
+		return err
+	}
+
+	return req.SaveAsFile(bts)
+}
+
+func inFile(inPath string, cmdParmas model.Parmas) error {
+	var allowTypes = []string{"tag", "html", "pdf"}
+	var allow = false
+
+	for _, allowType := range allowTypes {
+		if cmdParmas.Type == allowType {
+			allow = true
+		}
+	}
+	if !allow {
+		return errors.New("非法的输出类型：" + cmdParmas.Type)
+	}
+
+	req, err := parse.NewFileRequest(inPath, cmdParmas)
+	if err != nil {
+		return err
+	}
+
+	bts, err := req.GetBts()
+	if err != nil {
+		return err
+	}
+
+	return req.SaveAsFile(bts)
 }
 
 func setLoggerLevel() {
@@ -84,7 +144,6 @@ func initRootFlags() {
 func addCommand() {
 	rootCmd.AddCommand(getInstallCmd())
 	rootCmd.AddCommand(getConfigCmd())
-	rootCmd.AddCommand(getServeCmd())
 }
 
 // 输出参数信息调试

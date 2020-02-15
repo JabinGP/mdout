@@ -2,6 +2,7 @@ package tool
 
 import "errors"
 
+// TransformToLogrusLevel ...
 func TransformToLogrusLevel(configLevel string) (uint32, error) {
 	switch configLevel {
 	case "debug":

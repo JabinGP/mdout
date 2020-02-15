@@ -28,7 +28,7 @@ func Md(sourceByteArr []byte) (*[]byte, error) {
 	return &tagByteArr, nil
 }
 
-// AssembleTag 将标签拼接为完整的，可独立渲染的html（不依赖外部css，js文件）
+// AssembleTag 将标签拼接为完整的，可渲染的html
 func AssembleTag(themeName string, tagBytes *[]byte) (*[]byte, error) {
 	if !theme.CheckTheme(themeName) {
 		err := theme.DownloadTheme(themeName)
