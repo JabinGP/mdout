@@ -110,6 +110,8 @@ func GetTheme(themeName string) (model.Theme, error) {
 	if err != nil {
 		return targetTheme, err
 	}
+	log.Debugln(themeList)
+
 	for _, theme := range themeList {
 		if theme.Name == themeName {
 			targetTheme = theme

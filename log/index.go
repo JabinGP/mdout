@@ -23,6 +23,7 @@ var fileDefaultLevel = logrus.DebugLevel
 
 func init() {
 	once.Do(func() {
+		initLogFile()
 		Stdout = newStdout()
 		File = newFile()
 	})
@@ -54,7 +55,8 @@ func newStdout() *logrus.Logger {
 
 func newFile() *logrus.Logger {
 	logger := logrus.New()
-	file, err := os.OpenFile(static.LogFileFullName, os.O_APPEND, 0666)
+
+	file, err := os.OpenFile(static.LogFileFullName, os.O_APPEND|os.O_RDWR, os.ModeAppend)
 	if err != nil {
 		panic(err)
 	}

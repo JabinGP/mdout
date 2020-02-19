@@ -2,7 +2,7 @@ package model
 
 // ThemeMap 主题资源列表
 type ThemeMap struct {
-	ThemeList []Theme `json:"Theme"`
+	ThemeList []Theme `toml:"Theme"`
 }
 
 // Theme 包含主题信息以及下载地址
