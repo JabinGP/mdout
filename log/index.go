@@ -30,6 +30,12 @@ func init() {
 }
 
 func initLogFile() {
+	if !tool.IsExists(static.ConfigFolderFullName) {
+		err := os.Mkdir(static.ConfigFolderFullName, os.ModePerm)
+		if err != nil {
+			panic(err)
+		}
+	}
 	if !tool.IsExists(static.LogFolderFullName) {
 		err := os.Mkdir(static.LogFolderFullName, os.ModePerm)
 		if err != nil {
