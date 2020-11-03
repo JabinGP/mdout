@@ -22,7 +22,7 @@ import (
 func Md(sourceByteArr []byte) (*[]byte, error) {
 	log.Debugln("开始解析markdown...")
 	// 将输入的源md文件解析为html标签，存在[]byte中
-	md := markdown.New(markdown.XHTMLOutput(true))
+	md := markdown.New(markdown.XHTMLOutput(true), markdown.HTML(true))
 	tagByteArr := []byte(md.RenderToString(sourceByteArr))
 	log.Debugln("解析markdown成功")
 	return &tagByteArr, nil
