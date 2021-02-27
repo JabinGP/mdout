@@ -1,4 +1,4 @@
-package parse
+package parser
 
 import (
 	"bytes"
@@ -8,26 +8,44 @@ import (
 	"strings"
 
 	"github.com/JabinGP/mdout/log"
-	"github.com/JabinGP/mdout/model"
+	"github.com/JabinGP/mdout/requester"
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/theme"
 	"github.com/PuerkitoBio/goquery"
 )
 
-// TagParser markdown parser
-type TagParser struct {
-	parmas model.Parmas
+// TagFileParser Parse tag file to tag bytes
+type TagFileParser struct {
+}
+
+// Parse tag file  to tag bytes
+func (t *TagFileParser) Parse(req *requester.Request) error {
+	// 读取源文件
+	srcBytes, err := ioutil.ReadFile(req.AbsInPath)
+	if err != nil {
+		return err
+	}
+
+	req.Data = srcBytes
+	req.InType = "tag-bytes"
+	return nil
+}
+
+// TagBytesParser markdown parser
+type TagBytesParser struct {
+	// parmas model.Parmas
 }
 
 // Parse markdown to html
-func (t *TagParser) Parse(tagBytes []byte) ([]byte, error) {
-	if !theme.CheckTheme(t.parmas.Theme) {
-		return nil, fmt.Errorf("无法找到名为 %s 的主题", t.parmas.Theme)
+func (t *TagBytesParser) Parse(req *requester.Request) error {
+	tagBytes := req.Data.([]byte)
+	if !theme.CheckTheme(req.ThemeName) {
+		return fmt.Errorf("无法找到名为 %s 的主题", req.ThemeName)
 	}
 	log.Debugln("开始生成html...")
 	// 获取资源文件夹路径
 	var themeDir = filepath.FromSlash(static.ThemeFolderFullName +
-		"/" + t.parmas.Theme)
+		"/" + req.ThemeName)
 	// html模板
 	var indexHTMLFullName = filepath.FromSlash(themeDir +
 		"/index.html")
@@ -35,7 +53,7 @@ func (t *TagParser) Parse(tagBytes []byte) ([]byte, error) {
 	// 页面模板
 	indexHTMLBytes, err := ioutil.ReadFile(indexHTMLFullName)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// 获取主体html模板的Reader，用于goquery
@@ -44,7 +62,7 @@ func (t *TagParser) Parse(tagBytes []byte) ([]byte, error) {
 	// 获取HtmlDocument对象
 	indexHTMLDoc, err := goquery.NewDocumentFromReader(indexHTMLReader)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// 拼装页面
@@ -73,11 +91,14 @@ func (t *TagParser) Parse(tagBytes []byte) ([]byte, error) {
 	// 获取拼接后的html字符串
 	assembledHTML, err := indexHTMLDoc.Html()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// 构建byte数组
 	htmlBytes := []byte(assembledHTML)
 	log.Debugln("成功生成html")
-	return htmlBytes, nil
+
+	req.Data = htmlBytes
+	req.InType = "html-bytes"
+	return nil
 }

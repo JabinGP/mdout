@@ -57,7 +57,7 @@ func getPaperOrientation(pageOrientation string) bool {
 	return false
 }
 
-func getMargin(pageMargin string) (float64, float64, float64, float64, error) {
+func getMargin(pageMargin string) ([4]float64, error) {
 
 	// 替换所有中文逗号为英文逗号
 	pageMargin = strings.Replace(pageMargin, "，", ",", -1)
@@ -71,19 +71,19 @@ func getMargin(pageMargin string) (float64, float64, float64, float64, error) {
 	// 判断输入类型
 	switch len(marginArr) {
 	case 0:
-		return 1, 1, 1, 1, errors.New("无效的输入边距值！")
+		return [4]float64{1, 1, 1, 1}, errors.New("无效的输入边距值！")
 	case 1:
 		marginAll, err := strconv.ParseFloat(marginArr[0], 64)
 		if err != nil {
-			return 1, 1, 1, 1, err
+			return [4]float64{1, 1, 1, 1}, err
 		}
 
 		// 输出0会被chromedp重设为0.4默认值
 		if marginAll == 0 {
 			marginAll = 0.0000000000000001
 		}
-		return marginAll, marginAll, marginAll, marginAll, nil
+		return [4]float64{marginAll, marginAll, marginAll, marginAll}, nil
 	default:
-		return 1, 1, 1, 1, errors.New("无法识别的输入边距类型！")
+		return [4]float64{1, 1, 1, 1}, errors.New("无法识别的输入边距类型！")
 	}
 }

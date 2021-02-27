@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 
 	"github.com/JabinGP/mdout/parser"
@@ -56,16 +55,26 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 	// 获取用户输入路径
 	inPath := args[0]
 
-	// Build requester
+	// Build request
 	req, err := requester.NewRequest(inPath, cmdParmas)
 	if err != nil {
 		return err
 	}
 
 	// Parse request
-	return parser.Parse(req)
+	err = parser.Parse(req)
+	if err != nil {
+		return err
+	}
 
-	// return distribute(inPath, cmdParmas)
+	// Save
+	err = tool.SaveFile(req.Data.([]byte), req.AbsOutPath)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("成功保存文件：%s", req.AbsOutPath)
+	return nil
 }
 
 func setRuntimeLoggerLevel() {
@@ -75,62 +84,62 @@ func setRuntimeLoggerLevel() {
 	}
 }
 
-func distribute(inPath string, cmdParmas model.Parmas) error {
-	// 获取输入参数类型
-	inType, err := tool.GetType(inPath)
-	if err != nil {
-		log.Errorln(err)
-		return err
-	}
+// func distribute(inPath string, cmdParmas model.Parmas) error {
+// 	// 获取输入参数类型
+// 	inType, err := tool.GetType(inPath)
+// 	if err != nil {
+// 		log.Errorln(err)
+// 		return err
+// 	}
 
-	// 根据不同的输入类型处理，定位到不同的执行函数
-	switch inType {
-	case "url":
-		return inURL(inPath, cmdParmas)
-	default:
-		return inFile(inPath, cmdParmas)
-	}
-}
+// 	// 根据不同的输入类型处理，定位到不同的执行函数
+// 	switch inType {
+// 	case "url":
+// 		return inURL(inPath, cmdParmas)
+// 	default:
+// 		return inFile(inPath, cmdParmas)
+// 	}
+// }
 
-func inURL(inPath string, cmdParmas model.Parmas) error {
-	req, err := parse.NewURLRequest(inPath, cmdParmas)
-	if err != nil {
-		return err
-	}
+// func inURL(inPath string, cmdParmas model.Parmas) error {
+// 	req, err := parse.NewURLRequest(inPath, cmdParmas)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	bts, err := req.GetBts()
-	if err != nil {
-		return err
-	}
+// 	bts, err := req.GetBts()
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return req.SaveAsFile(bts)
-}
+// 	return req.SaveAsFile(bts)
+// }
 
-func inFile(inPath string, cmdParmas model.Parmas) error {
-	var allowTypes = []string{"tag", "html", "pdf"}
-	var allow = false
+// func inFile(inPath string, cmdParmas model.Parmas) error {
+// 	var allowTypes = []string{"tag", "html", "pdf"}
+// 	var allow = false
 
-	for _, allowType := range allowTypes {
-		if cmdParmas.OutType == allowType {
-			allow = true
-		}
-	}
-	if !allow {
-		return errors.New("非法的输出类型：" + cmdParmas.OutType)
-	}
+// 	for _, allowType := range allowTypes {
+// 		if cmdParmas.OutType == allowType {
+// 			allow = true
+// 		}
+// 	}
+// 	if !allow {
+// 		return errors.New("非法的输出类型：" + cmdParmas.OutType)
+// 	}
 
-	req, err := parse.NewFileRequest(inPath, cmdParmas)
-	if err != nil {
-		return err
-	}
+// 	req, err := parse.NewFileRequest(inPath, cmdParmas)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	bts, err := req.GetBts()
-	if err != nil {
-		return err
-	}
+// 	bts, err := req.GetBts()
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return req.SaveAsFile(bts)
-}
+// 	return req.SaveAsFile(bts)
+// }
 
 func setConfigLoggerLevel() {
 	stdoutLevel, err := tool.TransformToLogrusLevel(config.Obj.Runtime.StdoutLogLevel)
