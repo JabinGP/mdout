@@ -9,11 +9,11 @@ type Config struct {
 // Parmas 用户输入参数
 type Parmas struct {
 	// 文件输出路径
-	Out string
+	OutPath string
 	// 目标文件类型
-	Type string
+	OutType string
 	// 主题
-	Theme string
+	ThemeName string
 	// 打印页面格式
 	PageFormat string
 	// 打印页面方向

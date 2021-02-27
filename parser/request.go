@@ -1,4 +1,4 @@
-package parse
+package parser
 
 // // FileRequest ...
 // type FileRequest struct {
@@ -149,7 +149,6 @@ package parse
 // 	AbsOutPath string
 // }
 
-// // NewURLRequest ..
 // func NewURLRequest(inPath string, parmas model.Parmas) (URLRequest, error) {
 // 	escapedURL := url.QueryEscape(inPath)
 // 	absOutPath, err := tool.GetOutFullName(escapedURL, parmas)
