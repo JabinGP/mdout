@@ -1,21 +1,34 @@
 package cmd
 
 import (
-	"github.com/JabinGP/mdout/theme"
+	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/static"
 	"github.com/spf13/cobra"
 )
 
+var installParmas = struct {
+	URL string
+}{}
+
 func getInstallCmd() *cobra.Command {
-	return &cobra.Command{
+	var cmd = &cobra.Command{
 		Use:   "install",
-		Short: "下载运行时必要的资源到本地",
-		Long:  "下载配置文件，主题包并保存到用户家目录下的binmdout文件夹",
+		Short: "初始化配置文件",
+		Long:  "到指定的地址下载配置文件",
 		RunE:  installRunE,
 	}
+
+	initInstallCmdFlags(cmd)
+	return cmd
 }
 
-// installRunE install命令执行时运行
 func installRunE(cmd *cobra.Command, args []string) error {
-	themeName := args[0]
-	return theme.DownloadTheme(themeName)
+	return config.DownloadConfig(installParmas.URL)
+}
+
+func initInstallCmdFlags(cmd *cobra.Command) {
+	flags := cmd.Flags()
+
+	// 添加 Flags
+	flags.StringVarP(&installParmas.URL, "url", "u", static.ConfigURL, "toml配置文件地址")
 }

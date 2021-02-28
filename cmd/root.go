@@ -28,7 +28,7 @@ var (
 	}
 )
 
-// init 包初始化
+// init 初始化
 func init() {
 	initRootCmdFlags()
 	addCmdToRoot()
@@ -52,22 +52,19 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 	// 输出调试参数
 	showParams()
 
-	// 获取用户输入路径
-	inPath := args[0]
-
-	// Build request
-	req, err := requester.NewRequest(inPath, cmdParmas)
+	// 构建请求
+	req, err := requester.NewRequest(args[0], cmdParmas)
 	if err != nil {
 		return err
 	}
 
-	// Parse request
+	// 执行请求
 	err = parser.Parse(req)
 	if err != nil {
 		return err
 	}
 
-	// Save
+	// 保存数据文件
 	err = tool.SaveFile(req.Data.([]byte), req.AbsOutPath)
 	if err != nil {
 		return err
@@ -83,63 +80,6 @@ func setRuntimeLoggerLevel() {
 		log.SetStdoutLevel(level)
 	}
 }
-
-// func distribute(inPath string, cmdParmas model.Parmas) error {
-// 	// 获取输入参数类型
-// 	inType, err := tool.GetType(inPath)
-// 	if err != nil {
-// 		log.Errorln(err)
-// 		return err
-// 	}
-
-// 	// 根据不同的输入类型处理，定位到不同的执行函数
-// 	switch inType {
-// 	case "url":
-// 		return inURL(inPath, cmdParmas)
-// 	default:
-// 		return inFile(inPath, cmdParmas)
-// 	}
-// }
-
-// func inURL(inPath string, cmdParmas model.Parmas) error {
-// 	req, err := parse.NewURLRequest(inPath, cmdParmas)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	bts, err := req.GetBts()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return req.SaveAsFile(bts)
-// }
-
-// func inFile(inPath string, cmdParmas model.Parmas) error {
-// 	var allowTypes = []string{"tag", "html", "pdf"}
-// 	var allow = false
-
-// 	for _, allowType := range allowTypes {
-// 		if cmdParmas.OutType == allowType {
-// 			allow = true
-// 		}
-// 	}
-// 	if !allow {
-// 		return errors.New("非法的输出类型：" + cmdParmas.OutType)
-// 	}
-
-// 	req, err := parse.NewFileRequest(inPath, cmdParmas)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	bts, err := req.GetBts()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return req.SaveAsFile(bts)
-// }
 
 func setConfigLoggerLevel() {
 	stdoutLevel, err := tool.TransformToLogrusLevel(config.Obj.Runtime.StdoutLogLevel)
@@ -170,8 +110,8 @@ func initRootCmdFlags() {
 }
 
 func addCmdToRoot() {
-	rootCmd.AddCommand(getInstallCmd())
 	rootCmd.AddCommand(getConfigCmd())
+	rootCmd.AddCommand(getInstallCmd())
 }
 
 // 输出参数信息调试

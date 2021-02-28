@@ -31,9 +31,6 @@ func (h *HTMLBytesParser) Parse(req *requester.Request) error {
 		return err
 	}
 
-	// 更改浏览器打开路径为临时文件
-	req.AbsInPath = tmpFullName
-
 	// 清除临时html文件任务加入 defer 队列
 	req.DeferFuncs = append(req.DeferFuncs, func() {
 		if tool.IsExists(tmpFullName) {
@@ -45,6 +42,8 @@ func (h *HTMLBytesParser) Parse(req *requester.Request) error {
 		}
 	})
 
+	// 更改浏览器打开路径为临时文件
+	req.AbsInPath = tmpFullName
 	req.InType = "html-file"
 	return nil
 }

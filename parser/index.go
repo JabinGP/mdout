@@ -48,6 +48,6 @@ func NewParser(inType string) (Parser, error) {
 	case "url":
 		return &HTMLFileParser{}, nil
 	default:
-		return nil, fmt.Errorf("Unknown input parser type %s", inType)
+		return nil, fmt.Errorf("无法为输入类型 %s 找到对应的 Parser 。", inType)
 	}
 }

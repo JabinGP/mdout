@@ -27,7 +27,6 @@ func (m *MDFileParser) Parse(req *requester.Request) error {
 
 // MDBytesParser markdown parser
 type MDBytesParser struct {
-	// parmas model.Parmas
 }
 
 // Parse markdown bytes to tag bytes

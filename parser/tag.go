@@ -10,7 +10,7 @@ import (
 	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/requester"
 	"github.com/JabinGP/mdout/static"
-	"github.com/JabinGP/mdout/theme"
+	"github.com/JabinGP/mdout/tool"
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -33,13 +33,13 @@ func (t *TagFileParser) Parse(req *requester.Request) error {
 
 // TagBytesParser markdown parser
 type TagBytesParser struct {
-	// parmas model.Parmas
 }
 
 // Parse markdown to html
 func (t *TagBytesParser) Parse(req *requester.Request) error {
 	tagBytes := req.Data.([]byte)
-	if !theme.CheckTheme(req.ThemeName) {
+
+	if !tool.IsExists(filepath.FromSlash(static.ThemeFolderFullName + "/" + req.ThemeName)) {
 		return fmt.Errorf("无法找到名为 %s 的主题", req.ThemeName)
 	}
 	log.Debugln("开始生成html...")
