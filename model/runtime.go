@@ -1,6 +1,6 @@
 package model
 
-// Runtime ...
+// Runtime 辅助打印功能的、只能在配置文件中设置的参数
 type Runtime struct {
 	// 打开配置文件的编辑器命令
 	EditorPath string

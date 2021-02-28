@@ -1,6 +1,6 @@
 package model
 
-// Parmas 用户输入参数
+// Parmas 与转换直接相关的、可供用户在命令行设置的参数
 type Parmas struct {
 	// 文件输出路径
 	OutPath string
@@ -14,8 +14,8 @@ type Parmas struct {
 	PageOrientation string
 	// 打印边距
 	PageMargin string
-	// 指定Chrome程序执行路径
+	// 指定 Chrome 程序执行路径
 	ExecPath string
-	// 临时设置日志等级为"debug"
+	// 临时设置控制台日志等级为 "debug"
 	Verbose bool
 }

@@ -14,7 +14,7 @@ ExecPath = ""
 OutType = "pdf"
 # 指定输出路径
 OutPath = ""
-# 用于命令行临时指定日志等级为 debug
+# 用于命令行临时指定控制台日志等级为 debug
 Verbose = false
 
 [Runtime]
