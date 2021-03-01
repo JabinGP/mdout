@@ -18,7 +18,7 @@ func init() {
 	once.Do(func() {
 		InitConfigFileFolder()
 		if !tool.IsExists(static.ConfigFileFullName) {
-			log.Infof("配置文件 %s ，不存在，使用内置默认参数。", static.ConfigFileFullName)
+			log.Infof("配置文件 %s 不存在，使用内置默认参数。", static.ConfigFileFullName)
 			initConfigByDefault()
 			return
 		}

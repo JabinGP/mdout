@@ -30,7 +30,7 @@ var (
 
 func init() {
 	Name = "mdout"
-	Version = "0.6"
+	Version = "v0.6"
 
 	ConfigFolderName = "mdout"
 	ConfigURL = fmt.Sprintf("https://raw.githubusercontent.com/JabinGP/mdout-repo/master/config/%s/conf.toml", Version)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/JabinGP/mdout/parser"
 	"github.com/JabinGP/mdout/requester"
+	"github.com/JabinGP/mdout/static"
 
 	"github.com/JabinGP/mdout/tool"
 
@@ -20,7 +21,7 @@ var (
 	// 根命令
 	rootCmd = &cobra.Command{
 		Use:     "mdout",
-		Version: "0.6",
+		Version: static.Version,
 		Short:   "将markdown、html、url转换成pdf",
 		Long:    "读取输入的文件，在内部转换成html，并将html渲染为pdf保存",
 		Args:    cobra.MinimumNArgs(1),
