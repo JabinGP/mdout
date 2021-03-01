@@ -2,6 +2,7 @@ package parser
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -16,6 +17,7 @@ import (
 type HTMLBytesParser struct {
 }
 
+// Parse parse html bytes to pdf bytes
 func (h *HTMLBytesParser) Parse(req *requester.Request) error {
 	htmlBytes := req.Data.([]byte)
 	// 构建临时html文件路径
@@ -43,7 +45,7 @@ func (h *HTMLBytesParser) Parse(req *requester.Request) error {
 	})
 
 	// 更改浏览器打开路径为临时文件
-	req.AbsInPath = tmpFullName
+	req.AbsInPath = fmt.Sprintf("file://%s", tmpFullName)
 	req.InType = "html-file"
 	return nil
 }

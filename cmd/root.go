@@ -50,9 +50,11 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 	// 运行时日志等级
 	setRuntimeLoggerLevel()
 
+	// 输出配置文件
+	config.ShowConfig()
+
 	// 输出调试参数
 	showParams()
-
 	// 构建请求
 	req, err := requester.NewRequest(args[0], cmdParmas)
 	if err != nil {

@@ -20,6 +20,8 @@ func initConfigByDefault() {
 	Obj.Runtime.EditorPath = "code"
 	Obj.Runtime.StdoutLogLevel = "debug"
 	Obj.Runtime.FileLogLevel = "debug"
+	Obj.Runtime.EnableXHTMLOutput = true
+	Obj.Runtime.EnableHTMLTag = true
 }
 
 func readConfig() {
@@ -31,7 +33,7 @@ func readConfig() {
 
 // ShowConfig 输出读取到的配置文件
 func ShowConfig() {
-	confBts, err := json.Marshal(Obj)
+	confBts, err := json.MarshalIndent(Obj, "", "\t")
 	if err != nil {
 		log.Errorln(err)
 	}

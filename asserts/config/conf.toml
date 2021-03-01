@@ -36,3 +36,9 @@ EditorParmas = []
 StdoutLogLevel = "info"
 # 文件记录日志等级
 FileLogLevel = "info"
+
+# 参考：https://gitlab.com/golang-commonmark/markdown
+# 是否允许 HTML 标签
+EnableHTMLTag = true
+# 是否开启 XHTMLOutput
+EnableXHTMLOutput = true

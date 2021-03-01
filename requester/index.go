@@ -6,6 +6,7 @@ import (
 	"github.com/JabinGP/mdout/tool"
 )
 
+// Request parsed by parser
 type Request struct {
 	model.Parmas
 	InType     string
@@ -16,6 +17,7 @@ type Request struct {
 	DeferFuncs []func() // 用于释放临时资源
 }
 
+// NewRequest return a request
 func NewRequest(inPath string, parmas model.Parmas) (*Request, error) {
 	inType, err := tool.GetType(inPath)
 	if err != nil {

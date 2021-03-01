@@ -3,6 +3,7 @@ package parser
 import (
 	"io/ioutil"
 
+	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/requester"
 	"gitlab.com/golang-commonmark/markdown"
@@ -33,8 +34,12 @@ type MDBytesParser struct {
 func (m *MDBytesParser) Parse(req *requester.Request) error {
 	mdBytes := req.Data.([]byte)
 	log.Debugln("开始解析markdown...")
-	// 将输入的源md文件解析为html标签，存在[]byte中
-	md := markdown.New(markdown.XHTMLOutput(true), markdown.HTML(true))
+
+	md := markdown.New(
+		markdown.XHTMLOutput(config.Obj.Runtime.EnableXHTMLOutput),
+		markdown.HTML(config.Obj.Runtime.EnableHTMLTag),
+	)
+
 	tagBytes := []byte(md.RenderToString(mdBytes))
 	log.Debugln("解析markdown成功")
 

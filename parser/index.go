@@ -6,10 +6,12 @@ import (
 	"github.com/JabinGP/mdout/requester"
 )
 
+// Parser interface that contain Parse function
 type Parser interface {
 	Parse(*requester.Request) error
 }
 
+// Parse parse entry
 func Parse(req *requester.Request) error {
 	defer func() {
 		// 释放资源，defFunc 执行顺序与 defFunc 加入数组的顺序相反
@@ -31,6 +33,7 @@ func Parse(req *requester.Request) error {
 	return nil
 }
 
+// NewParser return parser according to input type
 func NewParser(inType string) (Parser, error) {
 	switch inType {
 	case "md-file":
