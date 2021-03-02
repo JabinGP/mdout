@@ -16,7 +16,7 @@ mdout http://www.baidu.com
 
 ### 可靠
 
-mdout可以完整保留你md文件里的代码格式，图片，甚至是数学公式，支持代码格式语法高亮
+mdout可以完整保留你md文件里的代码格式，图片，甚至是jax数学公式，mermaid流程图。
 
 电脑不会如人一般等待页面加载完全再选择打印，电脑自动执行打印时页面尚未渲染完全是件非常头疼的事情，对此，mdout没有简单地使用sleep休眠机制去碰运气，而是实现了一套非常简单的同步渲染机制，即便是你有1万行的mathjax数学公式、1万行的代码语法高亮要渲染，mdout都能完美的保证你的pdf上不会有任何一个未渲染完成的元素
 
@@ -34,13 +34,21 @@ mdout基于headless chrome，这使得mdout几乎兼容市面上所有能用于�
 
 ## 获取和安装
 
-> 由于Github下载速度实在是太过寒酸，只有30KB/s，以下的链接全部来自于阿里云服务器，尽管服务器有带宽限制，但是应对这个大小的文件还是没问题的
-
 mdout同时支持windows，linux，macOS，但目前只支持64位的系统  
 
-- linux：[mdout.linux.x86-64.tar.gz](http://112.74.177.253:8000/f/edcb3b9e460d4d18ab3f/?dl=1)
-- macOS：[mdout.macOS.x86-64.tar.gz](http://112.74.177.253:8000/f/100873c74622474da4d9/?dl=1)
-- windows：[mdout_windows_x86-64.zip](http://112.74.177.253:8000/f/574b3d14ffe04bb1880b/?dl=1)
+|系统|下载连接|
+|-|-|
+|linux|[mdout.linux.x86-64.tar.gz](https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.linux.x86-64.tar.gz)|
+|macOS|[mdout.macOS.x86-64.tar.gz](https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.macOS.x86-64.tar.gz)|
+|windows|[mdout_windows_x86-64.tar.gz](https://github.com/JabinGP/mdout/releases/download/v0.6/mdout_windows_x86-64.tar.gz)|
+
+由于大陆访问github速度非常慢，这里提供一个加速的下载链接，但无法该链接可用性做出保证，如果出现无法下载的情况请提issues：
+
+|系统|加速下载连接|
+|-|-|
+|linux|[mdout.linux.x86-64.tar.gz](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.linux.x86-64.tar.gz)|
+|macOS|[mdout.macOS.x86-64.tar.gz](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.macOS.x86-64.tar.gz)|
+|windows|[mdout_windows_x86-64.tar.gz](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout/releases/download/v0.6/mdout_windows_x86-64.tar.gz)|
 
 mdout已经为各平台打包了可执行文件，因此无论何种方式安装，无非就是下载可执行文件压缩包后解压缩，解压完就可以在mdout所在文件夹使用mdout了
 
@@ -48,12 +56,12 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
 
 ### 适用于老鸟的安装方式
 
-> 稍微懂点命令行的使用以下命令即可轻松安装
+> 稍微懂点命令行的使用以下命令即可轻松安装，注意{$DownloadLink}替换成上文对应版本的连接
 
 - linux
 
     ```cmd
-    wget http://112.74.177.253:8000/f/edcb3b9e460d4d18ab3f/?dl=1
+    wget {$DownloadLink}
     tar -xvzf mdout.macOS.x86-64.tar.gz
     sudo mv mdout /usr/local/bin
     mdout install
@@ -62,7 +70,7 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
 - macOS
 
     ```cmd
-    wget http://112.74.177.253:8000/f/100873c74622474da4d9/?dl=1
+    wget {$DownloadLink}
     tar -xvzf mdout.linux.x86-64.tar.gz
     mv mdout /usr/local/bin
     mdout install
@@ -70,6 +78,7 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
 
 ### 脚本安装
 
+> 由于版本更新，脚本不由我维护，暂不可用，请手动安装。
 > 非常感谢Fisher的脚本支持! [自己日用的脚本](https://github.com/FisherWY/Shell)
 
 linux && macOS推荐使用脚本安装
@@ -92,11 +101,9 @@ linux && macOS推荐使用脚本安装
 
 #### windows
 
-1. 点击下载
+1. 下载文件
 
-    - windows：[mdout_windows_x86-64.zip](http://112.74.177.253:8000/f/574b3d14ffe04bb1880b/?dl=1)
-
-    下载后使用zip工具解压缩，解压后会得到一个mdout.exe可执行文件
+    下载上文链接中windows版的文件，下载后使用zip工具解压缩，解压后会得到一个`mdout.exe`可执行文件
 
 2. 放置软件
 
@@ -132,13 +139,9 @@ linux && macOS推荐使用脚本安装
 
 #### linux
 
-1. 下载linux版本
+1. 下载
 
-    点击下载
-
-    - linux：[mdout.linux.x86-64.tar.gz](http://112.74.177.253:8000/f/edcb3b9e460d4d18ab3f/?dl=1)
-
-    下载完成后解压tar.gz包，解压后会得到一个mdout可执行文件
+    点击下载上文链接中linux版本，下载完成后解压tar.gz包，解压后会得到一个`mdout`可执行文件
 
 2. 将软件放入可执行文件库
 
@@ -162,13 +165,9 @@ linux && macOS推荐使用脚本安装
 
 #### macOS
 
-1. 下载macOS版本
+1. 下载
 
-    点击下载
-
-    - macOS：[mdout.macOS.x86-64.tar.gz](http://112.74.177.253:8000/f/100873c74622474da4d9/?dl=1)
-
-    下载后使用工具解压tar.gz包，解压后会得到一个mdout可执行文件
+    下载上文中macOS版本链接，下载后使用工具解压tar.gz包，解压后会得到一个mdout可执行文件
 
 2. 将软件移动到可执行文件库
 
@@ -196,13 +195,45 @@ mdout依赖于chrome浏览器，如果你的电脑已经安装了新版的chrome
 
 ### 进行系统初始化
 
-如果你不是使用脚本安装的，或者脚本安装不完全成功的，需要手动执行初始化，如果脚本安装成功，则跳过这一步
+> 如果你不是使用脚本安装的，或者脚本安装不完全成功的，需要手动执行初始化，如果脚本安装成功，则跳过这一步
 
-mdout依赖于html、css、js的模板，但是模板没有打包进程序，这是出于自定义化的考虑，执行初始化命令，程序会自动下载需要的文件到配置文件路径，至于这个路径在哪，在后面会提到，同时初始化程序执行结束后也会输出这个路径，请记住这个路径，在一些自定义和设置默认值时会使用到
+初始化分为两部分：
+
+1. 下载配置文件（如果一直用程序预设参数可以不下载）
+2. 下载主题包（至少需要一个主题包mdout才可以工作）
+
+#### 初始化配置文件
+
+执行如下命令即可
 
 ```cmd
-mdout install
+mdout install config
 ```
+
+通常来说，程序预设了一个github的配置文件地址，但可能由于网络问题，或者该地址的配置文件版本不对而需要自定义一个配置文件连接，可以通过 `-u` 参数指定一个配置文件链接下载。
+
+```cmd
+mdout install config -u {$ConfigLink}
+```
+
+|版本|配置文件链接|
+|-|-|
+|v0.6|[github链接](https://raw.githubusercontent.com/JabinGP/mdout/v0.6/asserts/config/conf.toml)，[大陆加速链接](https://ghproxy.cfjabin.workers.dev/https://raw.githubusercontent.com/JabinGP/mdout/v0.6/asserts/config/conf.toml)|
+
+#### 初始化主题包
+
+下载主题包需要指定两个参数：
+
+1. 第一个参数为 `-u` 接上主题包下载链接
+2. 第二个参数 `-n` 指定该主题包下载后命名为什么，推荐名为 `mdout` ，因为不修改配置文件的情况下，mdout默认会使用名为 `gihub` 的主题包。
+
+```cmd
+mdout install theme -u {$ThemeDownloadLink} -n {${ThemeName}}
+```
+
+|主题|仓库地址|主题包下载链接|
+|-|-|-|
+|仿github主题v0.6-0.1|[JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github)|[github链接](https://github.com/JabinGP/mdout-theme-github/releases/download/v0.6-0.1/mdout-theme-github-v0.6-0.1.zip)，[大陆加速链接](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout-theme-github/releases/download/v0.6-0.1/mdout-theme-github-v0.6-0.1.zip)|
 
 ### 最简单的示例
 
@@ -241,7 +272,7 @@ mdout --help
 
 ### 输入文件类型
 
-mdout支持许多输入类型，其中最普遍的就是markdown，但同样也支持html输入，url输入，但是注意，如果输入是url，不要忘记带上`http:://`
+mdout支持许多输入类型，其中最普遍的就是markdown，但同样也支持html输入，url输入，但是注意，如果输入是url，不要忘记带上`http://`
 
 - markdown  
 
@@ -320,11 +351,27 @@ mdout支持指定输出路径，输出文件名
 
 > 主题系统只对markdown输入有效
 
-mdout有着方便易用的主题系统，你可以很自由地自定义主题，mdout预设了三套主题
+mdout有着方便易用的主题系统，你可以很自由地自定义主题，mdout预设了一套[github风格的主题](https://github.com/JabinGP/mdout-theme-github)，你应该已经在前文安装过了。
 
-- 默认主题：`default`
-- 数学公式拓展主题：`mathjax`
-- github风格主题：`github`
+该主题支持代码语法高亮、MathJax数学公式、mermaid流程图。
+
+`mathjax`可以渲染类似这样的公式
+
+```markdown
+$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$
+```
+
+`mermaid`流程图使用方式
+
+```markdown
+    ```mermaid
+    graph TD;
+        A-->B;
+        A-->C;
+        B-->D;
+        C-->D;
+    ```
+```
 
 #### 你可以使用`-e`选项来指定主题
 
@@ -334,23 +381,13 @@ mdout有着方便易用的主题系统，你可以很自由地自定义主题，
     mdout yourfile.md -e github
     ```
 
-- 指定为数学公式拓展主题
+- 指定为其他自定义主题
 
     ```cmd
-    mdout yourfile.md -e mathjax
+    mdout yourfile.md -e {$ThemeName}
     ```
 
 > 指定主题后上面提到的输出选项依旧可用，可以配合`-t html`选项输出中间的html文件，这样可以调试主题效果，详细的说明将在自定义章节中提到
-
-`default`和`mathjax`这两套主题的配色是一模一样的，区别在于`mathjax`是同时支持代码语法高亮和数学公式渲染的，而`default`只支持代码语法高亮
-
-`mathjax`可以渲染类似这样的公式
-
-```markdown
-$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$
-```
-
-我可以将`mathjax`设为默认主题并删除`default`，但是我没有那么做，因为`default`可以作为一个能满足代码语法高亮的最小模板 *（当然你可能不需要代码语法高亮，这样的话`default`并不能算最小模板）* ，基于`default`模板进行自定义主题将变得非常简单
 
 至于自定义主题的教程，将在后面提到
 
@@ -416,56 +453,50 @@ mdout支持你自定义页面边距，以英寸为单位，默认为0.4英寸
     mdout yourfile.md -m0
     ```
 
-### 自定义配置文件
+### 修改配置文件
 
 在配置文件安装目录下面
 
-- macOS : /Users/你的用户名/binmdout  
-- linux: /home/你的用户名/binmdout
-- windows: /c/users/你的用户名/binmdout
+- macOS : /Users/你的用户名/mdout  
+- linux: /home/你的用户名/mdout
+- windows: /c/users/你的用户名/mdout
 
-有一个`conf.json`文件
+有一个`conf.coml`文件，如果没有则说明没有进行上文的初始化下载，该配置文件除了像上文那样指定链接下载，也可以手动创建。
 
 ```json
-{
-    
-    "Out":"",
+[Parmas]
+# 指定使用的主题名称
+ThemeName = "github"
 
-    "Type":"pdf",
-
-    "Theme":"default",
-
-    "PageFormat":"a4",
-
-    "PageOrientation":"portrait",
-
-    "PageMargin":"0.4"
-    
-}
+# 打印页面选项
+PageFormat = "a4"
+# 省略，详见 asserts/config/conf.toml
 ```
 
-包含了以上所有的可选设置，直接修改配置文件可以作为每次使用mdout的默认参数值
+### 方便地修改配置文件
+
+mdout 内置了一个 `config` 命令便于快速调用编辑器修改配置文件，该命令默认调用 `code` 命令呼出 vscode 打开配置文件，你可以在配置文件中修改自己需要的命令。详见 asserts/config/conf.toml。
+
+配置编辑器示例：
+
+```toml
+[Runtime]
+# 使用 windows自带记事本 示例
+EditorPath = "notepad"
+```
 
 ### 自定义配色
 
 mdout有着简单易用的主题系统，跟着下面的步骤来，你可以很轻松的添加自己的自定义效果
 
-首先打开你的配置文件所在的文件夹
+首先打开你的配置文件所在的文件夹中的`theme`文件夹，正常下载下该文件夹只有一个主题
 
-在你的配置包里面会有一个`conf.json`文件和`theme`主题文件夹，其中`conf.json`文件是用来更改默认参数的，`theme`存放了你的主题包。
-
-进入`theme`主题包，你可以看到默认的三个主题包
-
-- `default`
-- `mathjax`
 - `github`
 
 假设你现在需要自定义你的页面配色，大小，语法高亮等一切和css有关的内容，并且你想要为你的主题起名为`mytheme`
 
-首先你需要完整复制`default`的所有内容，到`default`文件夹所在的目录并重命名为`mytheme`，此时你的`theme`文件夹里有四个文件夹：
+首先你需要完整复制`github`的所有内容并重命名为`mytheme`，此时你的`theme`文件夹里有两个个文件夹：
 
-- `default`
-- `mathjax`
 - `github`
 - `mytheme`
 
