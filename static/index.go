@@ -33,7 +33,7 @@ func init() {
 	Version = "v0.6"
 
 	ConfigFolderName = "mdout"
-	ConfigURL = fmt.Sprintf("https://raw.githubusercontent.com/JabinGP/mdout-repo/master/config/%s/conf.toml", Version)
+	ConfigURL = fmt.Sprintf("https://raw.githubusercontent.com/JabinGP/mdout/%s/asserts/config/conf.toml", Version)
 	ConfigFileName = "conf.toml"
 	ConfigFolderFullName = tool.GetHomeDir() +
 		"/" + ConfigFolderName
