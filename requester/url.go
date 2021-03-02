@@ -10,7 +10,7 @@ import (
 func buildURLReq(inPath string, parmas model.Parmas) (*Request, error) {
 	escapedURL := url.QueryEscape(inPath)
 
-	absOutPath, err := tool.GetOutFullName(inPath, parmas)
+	absOutPath, err := tool.GetOutFullName(escapedURL, parmas)
 	if err != nil {
 		return nil, err
 	}
@@ -18,8 +18,9 @@ func buildURLReq(inPath string, parmas model.Parmas) (*Request, error) {
 		Parmas:    parmas,
 		InType:    "url",
 		InPath:    inPath,
-		AbsInPath: escapedURL,
+		AbsInPath: inPath,
 	}
+
 	req.OutType = "pdf" // Must be pdf when input type is url
 	req.AbsOutPath = absOutPath
 
