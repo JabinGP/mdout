@@ -3,7 +3,10 @@ package config
 import (
 	"sync"
 
+	"github.com/JabinGP/mdout/log"
 	"github.com/JabinGP/mdout/model"
+	"github.com/JabinGP/mdout/static"
+	"github.com/JabinGP/mdout/tool"
 )
 
 var once sync.Once
@@ -13,7 +16,12 @@ var Obj model.Config
 
 func init() {
 	once.Do(func() {
-		InitConfigFile()
+		InitConfigFileFolder()
+		if !tool.IsExists(static.ConfigFileFullName) {
+			log.Infof("配置文件 %s 不存在，使用内置默认参数。", static.ConfigFileFullName)
+			initConfigByDefault()
+			return
+		}
 		readConfig()
 	})
 }

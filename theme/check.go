@@ -8,7 +8,7 @@ import (
 )
 
 // CheckTheme 检测主题相关的文件夹是否存在
-func CheckTheme(themeName string)bool{
-	themeFolderFullName := filepath.FromSlash(static.ThemeFolderFullName+"/"+themeName)
+func CheckTheme(themeName string) bool {
+	themeFolderFullName := filepath.FromSlash(static.ThemeFolderFullName + "/" + themeName)
 	return tool.IsExists(themeFolderFullName)
 }

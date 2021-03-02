@@ -124,23 +124,23 @@ func GetOutFullNameFromOut(out string, option func(outDir *string, outName *stri
 func GetOutFullName(in string, parmas model.Parmas) (string, error) {
 	var outFullName string
 
-	absOut, err := Abs(parmas.Out)
+	absOut, err := Abs(parmas.OutPath)
 	if err != nil {
 		return "", errors.New("获取输出路径失败：" + err.Error())
 	}
 
-	if parmas.Out == "" { // 未指定输出位置
+	if parmas.OutPath == "" { // 未指定输出位置
 		outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
-			*outExt = "." + parmas.Type
+			*outExt = "." + parmas.OutType
 		})
 	} else {
 		if IsDir(absOut) { // 指定输出到文件夹
 			outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
 				*outDir = absOut
-				*outExt = "." + parmas.Type
+				*outExt = "." + parmas.OutType
 			})
 		} else { // 指定输出到文件名
-			outFullName, err = GetOutFullNameFromOut(parmas.Out, nil)
+			outFullName, err = GetOutFullNameFromOut(parmas.OutPath, nil)
 		}
 	}
 
@@ -169,4 +169,17 @@ func Abs(path string) (string, error) {
 	}
 
 	return absPath, nil
+}
+
+func CheckType(currType string, allowTypes []string) bool {
+	// 检查类型是否合法
+	var allow = false
+
+	for _, allowType := range allowTypes {
+		if currType == allowType {
+			allow = true
+		}
+	}
+
+	return allow
 }

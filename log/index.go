@@ -6,6 +6,7 @@ import (
 
 	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/tool"
+	"github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
 )
 
@@ -55,7 +56,9 @@ func newStdout() *logrus.Logger {
 	logger.SetFormatter(&logrus.TextFormatter{
 		ForceColors: true,
 	})
+	logrus.SetOutput(colorable.NewColorableStdout())
 	logger.SetLevel(stdoutDefaultLevel)
+
 	return logger
 }
 

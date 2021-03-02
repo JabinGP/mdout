@@ -1,4 +1,4 @@
-package ziper
+package tool
 
 import (
 	"archive/zip"

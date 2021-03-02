@@ -8,7 +8,7 @@ import (
 
 	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/log"
-	"github.com/JabinGP/mdout/tool"
+	"github.com/JabinGP/mdout/static"
 )
 
 func getConfigCmd() *cobra.Command {
@@ -22,13 +22,9 @@ func getConfigCmd() *cobra.Command {
 
 func configRunE(cmd *cobra.Command, args []string) error {
 	runtime := config.Obj.Runtime
+	parmas := append([]string{static.ConfigFileFullName}, (runtime.EditorParmas)...)
 
-	if runtime.EditorPath == "" {
-		log.Debugln("未设置编辑器，将使用vscode打开配置文件")
-		runtime.EditorPath = "code"
-	}
-	configFullName := tool.GetHomeDir() + "/mdout/conf.toml"
-	execCmd := exec.Command(runtime.EditorPath, configFullName)
+	execCmd := exec.Command(runtime.EditorPath, parmas...)
 	// 获取输出对象，可以从该对象中读取输出结果
 	stdout, err := execCmd.StdoutPipe()
 	if err != nil {

@@ -1,21 +1,60 @@
 package cmd
 
 import (
+	"fmt"
+
+	"github.com/JabinGP/mdout/config"
+	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/theme"
 	"github.com/spf13/cobra"
 )
 
+var installParmas = struct {
+	URL string
+}{}
+
 func getInstallCmd() *cobra.Command {
-	return &cobra.Command{
+	var cmd = &cobra.Command{
 		Use:   "install",
-		Short: "下载运行时必要的资源到本地",
-		Long:  "下载配置文件，主题包并保存到用户家目录下的binmdout文件夹",
-		RunE:  installRunE,
+		Short: "下载资源",
+		Long:  "指定路径下载配置文件或主题包",
 	}
+
+	cmd.AddCommand(getInstallConfigCmd())
+	cmd.AddCommand(getInstallThemeCmd())
+	return cmd
 }
 
-// installRunE install命令执行时运行
-func installRunE(cmd *cobra.Command, args []string) error {
-	themeName := args[0]
-	return theme.DownloadTheme(themeName)
+func getInstallConfigCmd() *cobra.Command {
+	var url string
+	var cmd = &cobra.Command{
+		Use:   "config",
+		Short: "初始化配置文件",
+		Long:  "到指定的地址下载配置文件",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return config.DownloadConfig(url)
+		},
+	}
+
+	cmd.Flags().StringVarP(&url, "url", "u", static.ConfigURL, "toml配置文件地址")
+	return cmd
+}
+
+func getInstallThemeCmd() *cobra.Command {
+	var url, name string
+	var cmd = &cobra.Command{
+		Use:   "theme",
+		Short: "下载主题",
+		Long:  "到指定的地址下载主题",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if url == "" || name == "" {
+				return fmt.Errorf("url = %s，name = %s，指定的 url 或者 name 为空！", url, name)
+			}
+			return theme.DownloadTheme(url, name)
+		},
+	}
+
+	cmd.Flags().StringVarP(&url, "url", "u", "", "主题文件zip包的地址")
+	cmd.Flags().StringVarP(&name, "name", "n", "", "主题文件保存的文件夹名")
+	return cmd
 }
