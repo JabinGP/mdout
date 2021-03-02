@@ -8,10 +8,10 @@ import (
 
 func buildHTMLReq(req *Request) error {
 	// 检查输出类型
-	if tool.CheckType(req.OutType, []string{"pdf"}) {
+	if !tool.CheckType(req.OutType, []string{"pdf"}) {
 		return errors.New("非法的输出类型：" + req.OutType)
 	}
 
-	req.OutType = "html-file"
+	req.InType = "html-file"
 	return nil
 }
