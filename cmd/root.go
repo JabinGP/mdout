@@ -17,7 +17,7 @@ import (
 
 var (
 	// 命令行输入参数，与cobra命令行绑定
-	cmdParmas model.Parmas
+	cmdParams model.Params
 	// 根命令
 	rootCmd = &cobra.Command{
 		Use:     "mdout",
@@ -56,7 +56,7 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 	// 输出调试参数
 	showParams()
 	// 构建请求
-	req, err := requester.NewRequest(args[0], cmdParmas)
+	req, err := requester.NewRequest(args[0], cmdParams)
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func rootRunE(cmd *cobra.Command, args []string) error {
 }
 
 func setRuntimeLoggerLevel() {
-	if cmdParmas.Verbose {
+	if cmdParams.Verbose {
 		level, _ := tool.TransformToLogrusLevel("debug")
 		log.SetStdoutLevel(level)
 	}
@@ -99,17 +99,17 @@ func setConfigLoggerLevel() {
 
 func initRootCmdFlags() {
 	rootFlags := rootCmd.Flags()
-	confParmas := config.Obj.Parmas
+	confParams := config.Obj.Params
 
 	// 添加Flags：变量 长名 短名 默认值 帮助说明
-	rootFlags.StringVarP(&cmdParmas.OutPath, "out", "o", confParmas.OutPath, "文件输出的路径")
-	rootFlags.StringVarP(&cmdParmas.OutType, "type", "t", confParmas.OutType, "输出的文件类型:tag、html、pdf")
-	rootFlags.StringVarP(&cmdParmas.ThemeName, "theme", "e", confParmas.ThemeName, "界面的主题，可放入自定义主题包后修改")
-	rootFlags.StringVarP(&cmdParmas.PageFormat, "format", "f", confParmas.PageFormat, "打印的页面格式：A5-A1、Legal、Letter、Tabloid")
-	rootFlags.StringVarP(&cmdParmas.PageOrientation, "orientation", "r", confParmas.PageOrientation, "打印的页面方向,可选portrait（纵向）、landscape（横向）")
-	rootFlags.StringVarP(&cmdParmas.PageMargin, "margin", "m", confParmas.PageMargin, "打印的页面边距大小，以英寸为单位")
-	rootFlags.StringVarP(&cmdParmas.ExecPath, "exec-path", "p", confParmas.ExecPath, "Chrome的执行路径")
-	rootFlags.BoolVarP(&cmdParmas.Verbose, "verbose", "v", false, "控制台输出详细日志")
+	rootFlags.StringVarP(&cmdParams.OutPath, "out", "o", confParams.OutPath, "文件输出的路径")
+	rootFlags.StringVarP(&cmdParams.OutType, "type", "t", confParams.OutType, "输出的文件类型:tag、html、pdf")
+	rootFlags.StringVarP(&cmdParams.ThemeName, "theme", "e", confParams.ThemeName, "界面的主题，可放入自定义主题包后修改")
+	rootFlags.StringVarP(&cmdParams.PageFormat, "format", "f", confParams.PageFormat, "打印的页面格式：A5-A1、Legal、Letter、Tabloid")
+	rootFlags.StringVarP(&cmdParams.PageOrientation, "orientation", "r", confParams.PageOrientation, "打印的页面方向,可选portrait（纵向）、landscape（横向）")
+	rootFlags.StringVarP(&cmdParams.PageMargin, "margin", "m", confParams.PageMargin, "打印的页面边距大小，以英寸为单位")
+	rootFlags.StringVarP(&cmdParams.ExecPath, "exec-path", "p", confParams.ExecPath, "Chrome的执行路径")
+	rootFlags.BoolVarP(&cmdParams.Verbose, "verbose", "v", false, "控制台输出详细日志")
 }
 
 func addCmdToRoot() {
@@ -120,12 +120,12 @@ func addCmdToRoot() {
 // 输出参数信息调试
 func showParams() {
 	log.Debugf("---这是你的合计输入参数---")
-	log.Debugf("输出路径：%s\n", cmdParmas.OutPath)
-	log.Debugf("输出格式：%s\n", cmdParmas.OutType)
-	log.Debugf("选择主题：%s\n", cmdParmas.ThemeName)
-	log.Debugf("打印页面格式：%s\n", cmdParmas.PageFormat)
-	log.Debugf("打印页面方向：%s\n", cmdParmas.PageOrientation)
-	log.Debugf("打印页面边距：%s\n", cmdParmas.PageMargin)
-	log.Debugf("Chrome的执行路径：%s\n", cmdParmas.ExecPath)
+	log.Debugf("输出路径：%s\n", cmdParams.OutPath)
+	log.Debugf("输出格式：%s\n", cmdParams.OutType)
+	log.Debugf("选择主题：%s\n", cmdParams.ThemeName)
+	log.Debugf("打印页面格式：%s\n", cmdParams.PageFormat)
+	log.Debugf("打印页面方向：%s\n", cmdParams.PageOrientation)
+	log.Debugf("打印页面边距：%s\n", cmdParams.PageMargin)
+	log.Debugf("Chrome的执行路径：%s\n", cmdParams.ExecPath)
 	log.Debugf("--------------------------")
 }

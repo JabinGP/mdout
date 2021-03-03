@@ -22,9 +22,9 @@ func getConfigCmd() *cobra.Command {
 
 func configRunE(cmd *cobra.Command, args []string) error {
 	runtime := config.Obj.Runtime
-	parmas := append([]string{static.ConfigFileFullName}, (runtime.EditorParmas)...)
+	params := append([]string{static.ConfigFileFullName}, (runtime.EditorParams)...)
 
-	execCmd := exec.Command(runtime.EditorPath, parmas...)
+	execCmd := exec.Command(runtime.EditorPath, params...)
 	// 获取输出对象，可以从该对象中读取输出结果
 	stdout, err := execCmd.StdoutPipe()
 	if err != nil {

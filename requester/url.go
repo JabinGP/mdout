@@ -7,15 +7,15 @@ import (
 	"github.com/JabinGP/mdout/tool"
 )
 
-func buildURLReq(inPath string, parmas model.Parmas) (*Request, error) {
+func buildURLReq(inPath string, params model.Params) (*Request, error) {
 	escapedURL := url.QueryEscape(inPath)
 
-	absOutPath, err := tool.GetOutFullName(escapedURL, parmas)
+	absOutPath, err := tool.GetOutFullName(escapedURL, params)
 	if err != nil {
 		return nil, err
 	}
 	var req = Request{
-		Parmas:    parmas,
+		Params:    params,
 		InType:    "url",
 		InPath:    inPath,
 		AbsInPath: inPath,

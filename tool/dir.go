@@ -121,26 +121,26 @@ func GetOutFullNameFromOut(out string, option func(outDir *string, outName *stri
 }
 
 // GetOutFullName ...
-func GetOutFullName(in string, parmas model.Parmas) (string, error) {
+func GetOutFullName(in string, params model.Params) (string, error) {
 	var outFullName string
 
-	absOut, err := Abs(parmas.OutPath)
+	absOut, err := Abs(params.OutPath)
 	if err != nil {
 		return "", errors.New("获取输出路径失败：" + err.Error())
 	}
 
-	if parmas.OutPath == "" { // 未指定输出位置
+	if params.OutPath == "" { // 未指定输出位置
 		outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
-			*outExt = "." + parmas.OutType
+			*outExt = "." + params.OutType
 		})
 	} else {
 		if IsDir(absOut) { // 指定输出到文件夹
 			outFullName, err = GetOutFullNameFromIn(in, func(outDir, outName, outExt *string) {
 				*outDir = absOut
-				*outExt = "." + parmas.OutType
+				*outExt = "." + params.OutType
 			})
 		} else { // 指定输出到文件名
-			outFullName, err = GetOutFullNameFromOut(parmas.OutPath, nil)
+			outFullName, err = GetOutFullNameFromOut(params.OutPath, nil)
 		}
 	}
 

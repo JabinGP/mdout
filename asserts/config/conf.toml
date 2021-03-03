@@ -1,4 +1,4 @@
-[Parmas]
+[Params]
 # 指定使用的主题名称
 ThemeName = "github"
 
@@ -27,7 +27,7 @@ Verbose = false
 # 使用 Sublime（在我电脑上的绝对路径，注意替换为自己电脑上的）
 # EditorPath = "E:\\Sublime Text 3\\sublime_text.exe"
 EditorPath = "code"
-EditorParmas = []
+EditorParams = []
 
 # 设置输出日志等级，可选列表
 # "debug", "info", "error"

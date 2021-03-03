@@ -11,11 +11,11 @@ import (
 )
 
 func initConfigByDefault() {
-	Obj.Parmas.OutType = "pdf"
-	Obj.Parmas.ThemeName = "github"
-	Obj.Parmas.PageFormat = "a4"
-	Obj.Parmas.PageOrientation = "portrait"
-	Obj.Parmas.PageMargin = "0.4"
+	Obj.Params.OutType = "pdf"
+	Obj.Params.ThemeName = "github"
+	Obj.Params.PageFormat = "a4"
+	Obj.Params.PageOrientation = "portrait"
+	Obj.Params.PageMargin = "0.4"
 
 	Obj.Runtime.EditorPath = "code"
 	Obj.Runtime.StdoutLogLevel = "debug"
