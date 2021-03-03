@@ -7,8 +7,9 @@ import (
 	"strings"
 )
 
-// UnZip 解压缩文件到 指定目录
-func UnZip(zipFile string, dest string) (err error) {
+// UnZipGithubArchive 解压缩 github 归档zip文件到指定目录。
+// 并且忽略 github 归档自动生成的外层文件夹。
+func UnZipGithubArchive(zipFile string, dest string) (err error) {
 	//目标文件夹不存在则创建
 	if _, err = os.Stat(dest); err != nil {
 		if os.IsNotExist(err) {
@@ -23,7 +24,17 @@ func UnZip(zipFile string, dest string) (err error) {
 
 	defer reader.Close()
 
-	for _, file := range reader.File {
+	// 第一个 file 是最外层文件夹，记录下来
+	outerFolderName := reader.File[0].Name
+
+	// 处理文件名，将所有文件的名字去掉开头的最外层文件夹的名字
+	for _, file := range reader.File[1:] {
+		file.Name = strings.Replace(file.Name, outerFolderName, "", 1)
+	}
+
+	// 跳过最外层文件夹，照旧处理
+	for _, file := range reader.File[1:] {
+		// fmt.Println(file.FileInfo().IsDir(), file.Name)
 		if file.FileInfo().IsDir() {
 			os.MkdirAll(dest+"/"+file.Name, 0755)
 			continue
@@ -41,10 +52,6 @@ func UnZip(zipFile string, dest string) (err error) {
 		defer rc.Close()
 
 		filename := dest + "/" + file.Name
-		//err = os.MkdirAll(getDir(filename), 0755)
-		//if err != nil {
-		//    return err
-		//}
 
 		w, err := os.Create(filename)
 		if err != nil {

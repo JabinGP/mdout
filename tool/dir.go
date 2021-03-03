@@ -38,6 +38,17 @@ func IsExists(path string) bool {
 	return true
 }
 
+// InitFolder 初始化文件夹
+func InitFolder(fullName string) error {
+	if !IsExists(fullName) {
+		err := os.Mkdir(fullName, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // GetType 分析输入的路径，返回类型结果
 func GetType(path string) (string, error) {
 

@@ -3,8 +3,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/JabinGP/mdout/config"
-	"github.com/JabinGP/mdout/static"
 	"github.com/JabinGP/mdout/theme"
 	"github.com/spf13/cobra"
 )
@@ -20,23 +18,7 @@ func getInstallCmd() *cobra.Command {
 		Long:  "指定路径下载配置文件或主题包",
 	}
 
-	cmd.AddCommand(getInstallConfigCmd())
 	cmd.AddCommand(getInstallThemeCmd())
-	return cmd
-}
-
-func getInstallConfigCmd() *cobra.Command {
-	var url string
-	var cmd = &cobra.Command{
-		Use:   "config",
-		Short: "初始化配置文件",
-		Long:  "到指定的地址下载配置文件",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return config.DownloadConfig(url)
-		},
-	}
-
-	cmd.Flags().StringVarP(&url, "url", "u", static.ConfigURL, "toml配置文件地址")
 	return cmd
 }
 
