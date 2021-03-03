@@ -62,7 +62,7 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
 
     ```cmd
     wget {$DownloadLink}
-    tar -xvzf mdout.macOS.x86-64.tar.gz
+    tar -xvzf mdout.linux.x86-64.tar.gz
     sudo mv mdout /usr/local/bin
     mdout install
     ```
@@ -71,7 +71,7 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
 
     ```cmd
     wget {$DownloadLink}
-    tar -xvzf mdout.linux.x86-64.tar.gz
+    tar -xvzf mdout.macOS.x86-64.tar.gz
     mv mdout /usr/local/bin
     mdout install
     ```
@@ -234,6 +234,20 @@ mdout install theme -u {$ThemeDownloadLink} -n {${ThemeName}}
 |主题|仓库地址|主题包下载链接|
 |-|-|-|
 |仿github主题v0.6-0.1|[JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github)|[github链接](https://github.com/JabinGP/mdout-theme-github/releases/download/v0.6-0.1/mdout-theme-github-v0.6-0.1.zip)，[大陆加速链接](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout-theme-github/releases/download/v0.6-0.1/mdout-theme-github-v0.6-0.1.zip)|
+
+如果你有 `git` 命令则更加简单，直接把 [JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github) 或者任何你喜欢的主题克隆到主题文件夹中即可。
+
+进入配置文件夹中的theme目录执行（各平台的配置文件路径见下文）命令，将 [JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github) 克隆进 `gihub` 文件夹：
+
+```cmd
+git clone https://github.com/JabinGP/mdout-theme-github github
+```
+
+如果遇到大陆访问 github 受阻问题，可以尝试使用这个 [大陆加速链接](https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout-theme-github)
+
+```cmd
+git clone https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout-theme-github github
+```
 
 ### 最简单的示例
 
@@ -559,9 +573,9 @@ mdout有着简单易用的主题系统，跟着下面的步骤来，你可以很
 
 ```html
 <!-- 添加页面样式 -->
-<link rel="stylesheet" href="/Users/jabin/binmdout/theme/mytheme/css/page.css"/>
+<link rel="stylesheet" href="/Users/jabin/mdout/theme/mytheme/css/page.css"/>
 <!-- 添加hljs样式 -->
-<link rel="stylesheet" href="/Users/jabin/binmdout/theme/mytheme/css/hljs.css"/>
+<link rel="stylesheet" href="/Users/jabin/mdout/theme/mytheme/css/hljs.css"/>
 ```
 
 主题配色分为两个文件，一个是页面配色css文件，一个是代码高亮的css文件
