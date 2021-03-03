@@ -64,7 +64,6 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
     wget {$DownloadLink}
     tar -xvzf mdout.linux.x86-64.tar.gz
     sudo mv mdout /usr/local/bin
-    mdout install
     ```
 
 - macOS
@@ -73,7 +72,6 @@ mdout已经为各平台打包了可执行文件，因此无论何种方式安装
     wget {$DownloadLink}
     tar -xvzf mdout.macOS.x86-64.tar.gz
     mv mdout /usr/local/bin
-    mdout install
     ```
 
 ### 脚本安装
