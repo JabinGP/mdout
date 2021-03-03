@@ -12,7 +12,7 @@ type EditorRuntime struct {
 	// 打开配置文件的编辑器命令
 	EditorPath string
 	// 打开配置文件的编辑器参数
-	EditorParmas []string
+	EditorParams []string
 }
 
 // LogRuntime 日志参数

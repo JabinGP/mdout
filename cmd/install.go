@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var installParmas = struct {
+var installParams = struct {
 	URL string
 }{}
 

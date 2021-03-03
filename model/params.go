@@ -1,11 +1,11 @@
 package model
 
-// Parmas 可供用户在命令行设置的参数
-type Parmas struct {
+// Params 可供用户在命令行设置的参数
+type Params struct {
 	// 输入输出参数
-	IOParmas
+	IOParams
 	// 打印页面参数
-	PageParmas
+	PageParams
 	// 主题
 	ThemeName string
 	// 指定 Chrome 程序执行路径
@@ -14,16 +14,16 @@ type Parmas struct {
 	Verbose bool
 }
 
-// IOParmas 输入输出参数
-type IOParmas struct {
+// IOParams 输入输出参数
+type IOParams struct {
 	// 文件输出路径
 	OutPath string
 	// 目标文件类型
 	OutType string
 }
 
-// PageParmas 打印页面参数
-type PageParmas struct {
+// PageParams 打印页面参数
+type PageParams struct {
 	// 打印页面格式
 	PageFormat string
 	// 打印页面方向

@@ -9,7 +9,7 @@ import (
 	"github.com/JabinGP/mdout/tool"
 )
 
-func buildFileReq(inPath string, parmas model.Parmas) (*Request, error) {
+func buildFileReq(inPath string, params model.Params) (*Request, error) {
 	// 获取输入文件类型
 	inExt := filepath.Ext(filepath.Base(inPath))
 	inType := strings.ReplaceAll(inExt, ".", "")
@@ -24,7 +24,7 @@ func buildFileReq(inPath string, parmas model.Parmas) (*Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	absOutPath, err := tool.GetOutFullName(inPath, parmas)
+	absOutPath, err := tool.GetOutFullName(inPath, params)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func buildFileReq(inPath string, parmas model.Parmas) (*Request, error) {
 	}
 
 	req := &Request{
-		Parmas:     parmas,
+		Params:     params,
 		InPath:     inPath,
 		AbsInPath:  absInPath,
 		AbsOutPath: absOutPath,

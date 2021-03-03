@@ -8,7 +8,7 @@ import (
 
 // Request parsed by parser
 type Request struct {
-	model.Parmas
+	model.Params
 	InType     string
 	InPath     string
 	AbsInPath  string
@@ -18,7 +18,7 @@ type Request struct {
 }
 
 // NewRequest return a request
-func NewRequest(inPath string, parmas model.Parmas) (*Request, error) {
+func NewRequest(inPath string, params model.Params) (*Request, error) {
 	inType, err := tool.GetType(inPath)
 	if err != nil {
 		log.Errorln(err)
@@ -26,7 +26,7 @@ func NewRequest(inPath string, parmas model.Parmas) (*Request, error) {
 	}
 
 	if inType == "url" {
-		return buildURLReq(inPath, parmas)
+		return buildURLReq(inPath, params)
 	}
-	return buildFileReq(inPath, parmas)
+	return buildFileReq(inPath, params)
 }
