@@ -6,7 +6,7 @@
 
 代理的使用方式为，在原有的完整链接之前加上 `https://ghproxy.cfjabin.workers.dev/` 。
 
-例如 github 原链接为 `https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.macOS.x86-64.tar.gz` ，加上代理前缀后则是 `https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout/releases/download/v0.6/mdout.macOS.x86-64.tar.gz` 。
+例如 github 原链接为 `https://github.com/JabinGP/mdout/releases/download/0.6.0/mdout.macOS.x86-64.tar.gz` ，加上代理前缀后则是 `https://ghproxy.cfjabin.workers.dev/https://github.com/JabinGP/mdout/releases/download/0.6.0/mdout.macOS.x86-64.tar.gz` 。
 
 该代理支持下载仓库源码文件，也支持克隆仓库、下载release文件。
 
