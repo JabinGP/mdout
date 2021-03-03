@@ -162,6 +162,7 @@ mdout
 不同平台的家目录不同，最终导致不同平台的 mdout 配置文件夹路径不同，以下表格以用户为 `jabin` 举例：
 
 |平台|配置文件夹路径|
+|-|-|
 |windows|C:/Users/jabin/mdout|
 |linux|/home/jabin/mdout|
 |macOS|/Users/jabin/mdout|
