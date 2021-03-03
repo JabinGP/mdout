@@ -54,3 +54,16 @@ func InitConfigFileFolder() {
 		log.Infoln("创建文件夹 " + static.ConfigFolderFullName + " 成功!\n")
 	}
 }
+
+// InitThemeFolder 初始化主题文件夹
+func InitThemeFolder() {
+	if !tool.IsExists(static.ThemeFolderFullName) {
+		log.Infoln("主题文件夹 " + static.ThemeFolderFullName + " 不存在，创建中...")
+		err := os.Mkdir(static.ThemeFolderFullName, os.ModePerm)
+		if err != nil {
+			log.Errorf("创建文件夹 " + static.ThemeFolderFullName + " 失败!\n")
+			panic(err)
+		}
+		log.Infoln("创建文件夹 " + static.ThemeFolderFullName + " 成功!\n")
+	}
+}
