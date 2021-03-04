@@ -178,9 +178,11 @@ mdout 的主题有两种方式初始化：
 mdout install theme -u {$ThemeDownloadLink} -n {${ThemeName}}
 ```
 
+> 0.1.1 版本解决了代码块不自动换行的问题
+
 |主题|仓库地址|主题包下载链接|
 |-|-|-|
-|仿github主题0.1.0|[JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github)|[github链接](https://github.com/JabinGP/mdout-theme-github/archive/0.1.0.zip)|
+|仿github主题0.1.1|[JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github)|[github链接](https://github.com/JabinGP/mdout-theme-github/archive/0.1.1.zip)|
 
 #### 4.2. 手动获取主题包
 
