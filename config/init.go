@@ -2,7 +2,9 @@ package config
 
 import (
 	"encoding/json"
-	"os"
+	"fmt"
+	"io/ioutil"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/JabinGP/mdout/log"
@@ -10,18 +12,23 @@ import (
 	"github.com/JabinGP/mdout/tool"
 )
 
-func initConfigByDefault() {
-	Obj.Params.OutType = "pdf"
-	Obj.Params.ThemeName = "github"
-	Obj.Params.PageFormat = "a4"
-	Obj.Params.PageOrientation = "portrait"
-	Obj.Params.PageMargin = "0.4"
+// CheckConfigFile 检查配置文件，不存在则自动创建
+func CheckConfigFile() {
+	if !tool.IsExists(static.ConfigFileFullName) {
+		log.Infof("配置文件 %s 不存在，将自动创建默认配置文件。", static.ConfigFileFullName)
+		CreateDefaultConfig()
+		log.Infof("自动创建默认配置文件 %s 成功。", static.ConfigFileFullName)
+	}
+}
 
-	Obj.Runtime.EditorPath = "code"
-	Obj.Runtime.StdoutLogLevel = "debug"
-	Obj.Runtime.FileLogLevel = "debug"
-	Obj.Runtime.EnableXHTMLOutput = true
-	Obj.Runtime.EnableHTMLTag = true
+// CreateDefaultConfig 根据 static 中的 TomlConfig 自动创建配置文件
+func CreateDefaultConfig() {
+	autoCreateInfo := fmt.Sprintf("# 由 mdout-%s 自动创建于 %s\n", static.Version, time.Now().Format("2006-01-02 15:04:05"))
+	err := ioutil.WriteFile(static.ConfigFileFullName, []byte(autoCreateInfo+static.TomlConfig), 0777)
+	if err != nil {
+		log.Errorln("创建默认配置文件失败！", err)
+		panic(err)
+	}
 }
 
 func readConfig() {
@@ -44,26 +51,16 @@ func ShowConfig() {
 
 // InitConfigFileFolder 初始化配置文件夹
 func InitConfigFileFolder() {
-	if !tool.IsExists(static.ConfigFolderFullName) {
-		log.Infoln("配置文件夹 " + static.ConfigFolderFullName + " 不存在，创建中...")
-		err := os.Mkdir(static.ConfigFolderFullName, os.ModePerm)
-		if err != nil {
-			log.Errorf("创建文件夹 " + static.ConfigFolderFullName + " 失败!\n")
-			panic(err)
-		}
-		log.Infoln("创建文件夹 " + static.ConfigFolderFullName + " 成功!\n")
+	if err := tool.InitFolder(static.ConfigFolderFullName); err != nil {
+		log.Errorln(err)
+		panic(err)
 	}
 }
 
 // InitThemeFolder 初始化主题文件夹
 func InitThemeFolder() {
-	if !tool.IsExists(static.ThemeFolderFullName) {
-		log.Infoln("主题文件夹 " + static.ThemeFolderFullName + " 不存在，创建中...")
-		err := os.Mkdir(static.ThemeFolderFullName, os.ModePerm)
-		if err != nil {
-			log.Errorf("创建文件夹 " + static.ThemeFolderFullName + " 失败!\n")
-			panic(err)
-		}
-		log.Infoln("创建文件夹 " + static.ThemeFolderFullName + " 成功!\n")
+	if err := tool.InitFolder(static.ThemeFolderFullName); err != nil {
+		log.Errorln(err)
+		panic(err)
 	}
 }

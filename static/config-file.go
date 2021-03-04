@@ -1,4 +1,6 @@
-[Params]
+package static
+
+var TomlConfig = `[Params]
 # 指定使用的主题名称
 ThemeName = "github"
 
@@ -42,3 +44,4 @@ FileLogLevel = "info"
 EnableHTMLTag = true
 # 是否开启 XHTMLOutput
 EnableXHTMLOutput = true
+`

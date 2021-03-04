@@ -28,7 +28,6 @@ func DownloadTheme(themeZipURL string, themeName string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 	defer func() {
 		if tool.IsExists(themeZipFileFullName) {
 			log.Debugln("开始删除临时压缩文件 " + themeZipFileFullName)
@@ -40,6 +39,7 @@ func DownloadTheme(themeZipURL string, themeName string) error {
 		}
 		log.Debugln("删除 " + themeZipFileFullName + "成功")
 	}()
+	defer file.Close()
 
 	// 从url获取资源
 	urlFileResp, err := http.Get(themeZipURL)
@@ -64,7 +64,7 @@ func DownloadTheme(themeZipURL string, themeName string) error {
 	log.Debugln("开始解压")
 
 	// 解压缩主题文件
-	err = tool.UnZip(themeZipFileFullName, path)
+	err = tool.UnZipGithubArchive(themeZipFileFullName, path)
 	if err != nil {
 		log.Errorln("解压失败")
 		log.Errorln(err)

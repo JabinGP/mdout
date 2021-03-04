@@ -115,6 +115,7 @@ func initRootCmdFlags() {
 func addCmdToRoot() {
 	rootCmd.AddCommand(getConfigCmd())
 	rootCmd.AddCommand(getInstallCmd())
+	rootCmd.AddCommand(getShowCmd())
 }
 
 // 输出参数信息调试
