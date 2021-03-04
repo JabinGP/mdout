@@ -23,7 +23,7 @@ func CheckConfigFile() {
 
 // CreateDefaultConfig 根据 static 中的 TomlConfig 自动创建配置文件
 func CreateDefaultConfig() {
-	autoCreateInfo := fmt.Sprintf("# 自动创建于 %s\n", time.Now().Format("2006-01-02 15:04:05"))
+	autoCreateInfo := fmt.Sprintf("# 由 mdout-%s 自动创建于 %s\n", static.Version, time.Now().Format("2006-01-02 15:04:05"))
 	err := ioutil.WriteFile(static.ConfigFileFullName, []byte(autoCreateInfo+static.TomlConfig), 0777)
 	if err != nil {
 		log.Errorln("创建默认配置文件失败！", err)
