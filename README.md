@@ -2,6 +2,8 @@
 
 一个Go语言实现的Markdown转PDF命令行工具，基于headless chrome，简单、可靠、易安装、可定制化、易拓展
 
+_**如果觉得对你有帮助，点个star鼓励一下作者吧！**_
+
 ## 1. mdout有何特点
 
 ### 1.1 简单
@@ -40,13 +42,22 @@ mdout基于headless chrome，这使得mdout几乎兼容市面上所有能用于�
 
 mdout依赖于chrome浏览器，如果你的电脑已经安装了新版的chrome浏览器，无需更多配置，可以直接运行mdout，如果是旧版的chrome浏览器，建议进行升级后使用，如果还未安装chrome浏览器，请安装后再使用mdout
 
-### 3.1. 最简单的示例
+### 3.1. 帮助文档
+
+每个命令行程序都有帮助文档，mdout也不例外
+
+```cmd
+mdout -h
+mdout --help
+```
+
+### 3.2. 最简单的示例
 
 ```cmd
 mdout 文件路径
 ```
 
-#### 3.1.1. 文件路径可以是相对路径
+#### 3.2.1. 输入文件路径可以是相对路径
 
 - 文件在当前目录
 
@@ -65,15 +76,6 @@ mdout 文件路径
     ```cmd
     mdout /tmp/markdown/yourfile.md
     ```
-
-### 3.2. 帮助文档
-
-每个命令行程序都有帮助文档，mdout也不例外
-
-```cmd
-mdout -h
-mdout --help
-```
 
 ### 3.3. 输入文件类型
 
@@ -194,7 +196,7 @@ $$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$
 
 > 指定主题后上面提到的输出选项依旧可用，可以配合`-t html`选项输出中间的html文件，这样可以调试主题效果，详细的说明将在自定义章节中提到
 
-至于自定义主题的教程，将在后面提到
+至于自定义主题的教程，将在后面提到。
 
 ### 3.7. 打印页面设置
 
@@ -270,7 +272,30 @@ mdout 内置了一个 `config` 命令便于快速调用编辑器修改配置文�
 EditorPath = "notepad"
 ```
 
-### 3.9. 自定义配色
+### 3.9. 获取 mdout 的配置相关信息
+
+在 [安装指南](install.md) 中有一个表格展示了各个平台中 mdout 的配置文件夹。
+
+在 mdout-0.7.0. 以上还可以通过内置的 `show` 命令获取配置信息：
+
+|命令输入|含义|输出示例|
+|-|-|-|
+|mdout show config-folder|输出配置文件夹路径|C:\Users\jabin\mdout|
+|mdout show theme-folder|输出主题文件夹路径|C:\Users\jabin\mdout\theme|
+|mdout show log-folder|输出日志文件夹路径|C:\Users\Jabin\mdout\log|
+|mdout show theme-list|输出目前主题文件夹下的主题包（命令不对主题包做可用性检验）|C:\Users\Jabin\mdout\log|
+
+mdout 内置了一个 `config` 命令便于快速调用编辑器修改配置文件，该命令默认调用 `code` 命令呼出 vscode 打开配置文件，你可以在配置文件中修改自己需要的命令。
+
+在 conf.toml 中配置编辑器示例：
+
+```toml
+[Runtime]
+# 使用 windows自带记事本 示例
+EditorPath = "notepad"
+```
+
+### 3.10. 自定义配色
 
 mdout有着简单易用的主题系统，跟着下面的步骤来，你可以很轻松的添加自己的自定义效果
 
@@ -349,15 +374,13 @@ mdout有着简单易用的主题系统，跟着下面的步骤来，你可以很
 <link rel="stylesheet" href="/Users/jabin/mdout/theme/mytheme/css/hljs.css"/>
 ```
 
-主题配色分为两个文件，一个是页面配色css文件，一个是代码高亮的css文件
+主题配色分为两个文件：
 
-如果你要修改页面配色，只需要一边开着浏览器，一遍打开刚刚主题包里面的
-`mytheme`->`css`->`page.css`修改，然后刷新浏览器查看结果
+- `page.css` ：页面配色css文件
+- `hljs.css`：与 highlight.js 代码高亮配套的css文件
 
-或者你想更改语法高亮的配色，由于mdout依赖于hljs，你只需要去hljs官网下载你喜欢的主题包，然后替换`mytheme`->`css`->`hljs.css`里的内容就可以了
+如果你要修改页面配色，只需要一边开着浏览器，一遍打开刚刚主题包里面的 `mytheme/css/page.css` 修改然后刷新浏览器查看结果。
 
-如果你完成了你的主题修改，你可以将刚刚生成的html删除，或者你想留做自己动手的纪念也是可以的
+或者你想更改语法高亮的配色，由于mdout依赖于hljs，你只需要去hljs官网下载你喜欢的主题包，然后替换`mytheme/css/hljs.css`里的内容就可以了，如果你完成了你的主题修改，你可以将刚刚生成的html删除。
 
-最后，你可以使用`mdout yourfile.md -e mytheme`来指定使用你的自定义主题啦，或者你可以在前面提到过的`conf.json`里面配置默认使用你的`mytheme`主题
-
-_**如果觉得对你有帮助，点个star吧！**_
+最后，你可以使用`mdout yourfile.md -e mytheme`来指定使用你的自定义主题啦，或者你可以在前面提到过的`conf.toml`里面配置默认使用你的 `mytheme` 主题。

@@ -76,16 +76,16 @@ mdout 基于 golang ，得益于 golang 交叉编译的特点，可以提前为�
 4. 选择高级 -> 点击环境变量
     ![3](./markdown/3.jpg)  
 
-5. 找到下半部分的系统变量，双击`Path`行
+5. 找到下半部分的系统变量，双击 `Path` 行
     ![4](./markdown/4.jpg)  
 
 6. 在弹出来的窗口选择新建
     ![5](./markdown/5.jpg)  
 
-7. 填入`D:\mdout`，然后一定要连续点完三个确定
+7. 填入 `D:\mdout` ，然后一定要连续点完三个确定
     ![6](./markdown/6.jpg)  
 
-8. 检验是否成功打开cmd，或者powershell，或者你有gitbash都ok（推荐使用命令行的windows用户都装一个gitbash），输入`mdout`，看到如下输出就是成功了
+8. 检验是否成功打开 cmd 或者 powershell ，再或者 gitbash 都可以（推荐使用命令行的 windows 用户都至少装一个 gitbash ），输入 `mdout` ，看到如下输出就是成功了
     ![7](./markdown/7.jpg)
 
 ##### 2.2.2 linux获取可执行文件并配置命令的步骤
@@ -136,14 +136,7 @@ mdout 基于 golang ，得益于 golang 交叉编译的特点，可以提前为�
     mdout --version
     ```
 
-### 3. 初始化主题包
-
-mdout 的主题有两种方式初始化：
-
-1. 通过 mdout 内置命令解压 github 归档的 zip 文件形成主题包
-2. 通过其他方式手动获取主题包
-
-#### 3.1. 配置文件夹说明
+### 3. 配置文件夹说明
 
 mdout 在运行时会自动在用户的家目录下创建一个名为 mdout 的配置文件夹，并且在一般而言结构应该如下所示：
 
@@ -167,7 +160,14 @@ mdout
 |linux|/home/jabin/mdout|
 |macOS|/Users/jabin/mdout|
 
-#### 3.2. 通过 mdout 内置命令获取主题包
+### 4. 初始化主题包
+
+mdout 的主题有两种方式初始化：
+
+1. 通过 mdout 内置命令解压 github 归档的 zip 文件形成主题包
+2. 通过其他方式手动获取主题包
+
+#### 4.1. 通过 mdout 内置命令获取主题包
 
 下载主题包需要指定两个参数：
 
@@ -182,11 +182,11 @@ mdout install theme -u {$ThemeDownloadLink} -n {${ThemeName}}
 |-|-|-|
 |仿github主题0.1.0|[JabinGP/mdout-theme-github](https://github.com/JabinGP/mdout-theme-github)|[github链接](https://github.com/JabinGP/mdout-theme-github/archive/0.1.0.zip)|
 
-#### 3.3. 手动获取主题包
+#### 4.2. 手动获取主题包
 
-手动获取有很多种方式，甚至可以自己创建一个主题包，这里就先介绍用 git 克隆配套的仿github主题。
+手动获取有很多种方式，甚至可以自己创建一个主题包，这里就先介绍用 git 克隆配套的仿 github 主题。
 
-参考 3.1 中的不同平台配置文件夹路径以及文件位置，进入 mdout/theme 文件夹，利用 git 将主题包克隆到该文件夹中：
+参考 `3.` 中的不同平台配置文件夹路径以及文件位置，进入 mdout/theme 文件夹，利用 git 将主题包克隆到该文件夹中：
 
 ```bash
 # 例如将 JabinGP/mdout-theme-github 克隆并保存为主题名 github

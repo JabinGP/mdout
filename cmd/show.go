@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/JabinGP/mdout/config"
 	"github.com/JabinGP/mdout/log"
@@ -32,7 +33,34 @@ func getShowCmd() *cobra.Command {
 					return err
 				}
 				fmt.Printf(string(confBytes))
+			case "theme-list":
+				fileInfoList, err := ioutil.ReadDir(static.ThemeFolderFullName)
+				if err != nil {
+					log.Errorln(err)
+				}
+				themeList := []string{}
+				for i := range fileInfoList {
+					if fileInfoList[i].IsDir() {
+						themeList = append(themeList, fileInfoList[i].Name())
+					}
+				}
+
+				if len(themeList) == 0 {
+					fmt.Println("暂无主题")
+					return nil
+				}
+
+				for _, themeName := range themeList {
+					fmt.Println(themeName)
+				}
+
+				return nil
+			default:
+				err := fmt.Errorf("无法识别的 show 命令输入 %s，请检查输入。", in)
+				log.Errorln(err)
+				return err
 			}
+
 			return nil
 		},
 	}
