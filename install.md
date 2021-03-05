@@ -22,10 +22,21 @@ mdout 的安装分为三步：
 2. 配置 mdout 命令
 3. 下载 mdout 主题
 
+
+### 1.1 脚本一键安装
+
+> 感谢 Fisher 的脚本支持! 如果对你有帮助，可以 star 支持作者 —— [自己日用的脚本](https://github.com/FisherWY/Shell)！
+
 如果你的系统是 macOS 或者 linux ，这三个部分可以被简化成一个脚本：
 
 ```cmd
-bash -c "$(wget https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh -O -)"
+wget https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh -O - | bash /dev/stdin
+```
+
+如果你的电脑访问 github 有困难，可以使用以下命令通过代理使用脚本：
+
+```
+wget https://ghproxy.cfjabin.workers.dev/https://raw.githubusercontent.com/FisherWY/Shell/master/mdout/install_mdout.sh -O - | bash /dev/stdin --enable-proxy
 ```
 
 ### 2. 获取 mdout 可执行文件与命令配置
@@ -175,7 +186,7 @@ mdout 的主题有两种方式初始化：
 2. 第二个参数 `-n` 指定该主题包下载后命名为什么，推荐名为 `github` ，因为不修改配置文件和指定主题参数的情况下，mdout 默认会使用名为 `github` 的主题包。
 
 ```cmd
-mdout install theme -u {$ThemeDownloadLink} -n {${ThemeName}}
+mdout install theme -u {$ThemeDownloadLink} -n ${ThemeName}
 ```
 
 > 0.1.1 版本解决了代码块不自动换行的问题
