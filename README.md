@@ -283,7 +283,7 @@ EditorPath = "notepad"
 |mdout show config-folder|输出配置文件夹路径|C:\Users\jabin\mdout|
 |mdout show theme-folder|输出主题文件夹路径|C:\Users\jabin\mdout\theme|
 |mdout show log-folder|输出日志文件夹路径|C:\Users\Jabin\mdout\log|
-|mdout show theme-list|输出目前主题文件夹下的主题包（命令不对主题包做可用性检验）|C:\Users\Jabin\mdout\log|
+|mdout show theme-list|输出目前主题文件夹下的主题包（命令不对主题包做可用性检验）|github|
 
 mdout 内置了一个 `config` 命令便于快速调用编辑器修改配置文件，该命令默认调用 `code` 命令呼出 vscode 打开配置文件，你可以在配置文件中修改自己需要的命令。
 
