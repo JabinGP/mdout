@@ -1,6 +1,7 @@
 package theme
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
@@ -14,7 +15,7 @@ import (
 )
 
 // DownloadTheme 从指定 url 下载主题压缩包并解压
-func DownloadTheme(themeZipURL string, themeName string) error {
+func DownloadTheme(themeZipURL string, themeName string, skipTlsVerify bool) error {
 	path := filepath.FromSlash(static.ThemeFolderFullName + "/" + themeName)
 	if tool.IsExists(path) {
 		err := errors.New("主题包：" + path + " 已经存在，如需重新下载请删除后重试！")
@@ -41,8 +42,21 @@ func DownloadTheme(themeZipURL string, themeName string) error {
 	}()
 	defer file.Close()
 
-	// 从url获取资源
-	urlFileResp, err := http.Get(themeZipURL)
+	var urlFileResp *http.Response
+	if !skipTlsVerify {
+		// 从url获取资源
+		urlFileResp, err = http.Get(themeZipURL)
+	} else {
+		// 跳过https请求时对服务器证书的认证。解决构建镜像时安装主题校验github证书失败问题
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client := &http.Client{
+			Transport: tr,
+		}
+		urlFileResp, err = client.Get(themeZipURL)
+	}
+
 	if err != nil {
 		return err
 	}

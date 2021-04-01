@@ -24,6 +24,7 @@ func getInstallCmd() *cobra.Command {
 
 func getInstallThemeCmd() *cobra.Command {
 	var url, name string
+	var skipTlsVerify bool
 	var cmd = &cobra.Command{
 		Use:   "theme",
 		Short: "下载主题",
@@ -32,11 +33,12 @@ func getInstallThemeCmd() *cobra.Command {
 			if url == "" || name == "" {
 				return fmt.Errorf("url = %s，name = %s，指定的 url 或者 name 为空！", url, name)
 			}
-			return theme.DownloadTheme(url, name)
+			return theme.DownloadTheme(url, name, skipTlsVerify)
 		},
 	}
 
 	cmd.Flags().StringVarP(&url, "url", "u", "", "主题文件zip包的地址")
 	cmd.Flags().StringVarP(&name, "name", "n", "", "主题文件保存的文件夹名")
+	cmd.Flags().BoolVarP(&skipTlsVerify, "skipTlsVerity", "k", false, "跳过https证书检查")
 	return cmd
 }
