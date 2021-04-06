@@ -13,3 +13,4 @@ build_linux:
 
 image:
 	docker build -t mdout .
+	docker build -t mdout:chinese --build-arg LANGUAGE=chinese .
