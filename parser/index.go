@@ -48,8 +48,10 @@ func NewParser(inType string) (Parser, error) {
 		return &HTMLBytesParser{}, nil
 	case "html-file":
 		return &HTMLFileParser{}, nil
+	case "html-source":
+		return &HTMLSourceParser{}, nil
 	case "url":
-		return &HTMLFileParser{}, nil
+		return &HTMLSourceParser{}, nil
 	default:
 		return nil, fmt.Errorf("无法为输入类型 %s 找到对应的 Parser 。", inType)
 	}
