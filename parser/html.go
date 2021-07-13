@@ -44,18 +44,28 @@ func (h *HTMLBytesParser) Parse(req *requester.Request) error {
 		}
 	})
 
-	// 更改浏览器打开路径为临时文件
-	req.AbsInPath = fmt.Sprintf("file://%s", tmpFullName)
+	req.AbsInPath = tmpFullName
 	req.InType = "html-file"
 	return nil
 }
 
-// HTMLFileParser parse html bytes to tmp html bytes
+// HTMLFileParser parse html file to pdf bytes
 type HTMLFileParser struct {
 }
 
-// Parse html bytes to pdf bytes
 func (h *HTMLFileParser) Parse(req *requester.Request) error {
+	// 添加文件协议头，以适配浏览器访问
+	req.AbsInPath = fmt.Sprintf("file://%s", req.AbsInPath)
+	req.InType = "html-source"
+	return nil
+}
+
+// HTMLSourceParser parse html source to pdf bytes
+type HTMLSourceParser struct {
+}
+
+// Parse html file to pdf bytes
+func (h *HTMLSourceParser) Parse(req *requester.Request) error {
 	log.Debugln("准备开始打印...")
 	htmlPath := req.AbsInPath
 	ctx, cancelFunc := h.getChromedpCtx(*req)
@@ -87,7 +97,7 @@ func (h *HTMLFileParser) Parse(req *requester.Request) error {
 	return nil
 }
 
-func (h *HTMLFileParser) getChromedpCtx(req requester.Request) (context.Context, context.CancelFunc) {
+func (h *HTMLSourceParser) getChromedpCtx(req requester.Request) (context.Context, context.CancelFunc) {
 	if req.ExecPath != "" {
 		log.Debugln("指定chrome执行路径：" + req.ExecPath)
 		var cancel1, cancel2 context.CancelFunc
@@ -113,7 +123,7 @@ func (h *HTMLFileParser) getChromedpCtx(req requester.Request) (context.Context,
 	return chromedp.NewContext(context.Background())
 }
 
-func (h *HTMLFileParser) openHTML(ctx context.Context, htmlPath string) error {
+func (h *HTMLSourceParser) openHTML(ctx context.Context, htmlPath string) error {
 	// 定位到文件
 	err := chromedp.Run(ctx, chromedp.Navigate(htmlPath))
 	if err != nil {
@@ -124,7 +134,7 @@ func (h *HTMLFileParser) openHTML(ctx context.Context, htmlPath string) error {
 	return nil
 }
 
-func (h *HTMLFileParser) waitForHTMLReady(ctx context.Context) error {
+func (h *HTMLSourceParser) waitForHTMLReady(ctx context.Context) error {
 	var isJabinGP bool
 	// eval是下策，因为官方的查找元素api都无法在元素不存在的时候正常运行，会一直卡住
 	err := chromedp.Run(ctx, chromedp.Evaluate(`document.querySelector("#jabingp")!=null`, &isJabinGP))
@@ -165,7 +175,7 @@ func (h *HTMLFileParser) waitForHTMLReady(ctx context.Context) error {
 	return nil
 }
 
-func (h *HTMLFileParser) print(ctx context.Context, req requester.Request) ([]byte, error) {
+func (h *HTMLSourceParser) print(ctx context.Context, req requester.Request) ([]byte, error) {
 	var pdfBytes []byte
 	// 通过尺寸获取宽高
 	paperWidth, paperHeight := getPaperWidthAndHeight(req.PageFormat)
