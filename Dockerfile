@@ -6,6 +6,7 @@ FROM base as default
 
 FROM base as chinese
 RUN apt update && \
+    apt install -y dumb-init && \
     apt install -y ttf-wqy-zenhei && \
     apt install -y xfonts-intl-chinese wqy* && \
     apt autoclean && \
@@ -18,5 +19,6 @@ WORKDIR /data
 COPY mdout /usr/local/bin
 
 RUN mdout install theme -u https://github.com/JabinGP/mdout-theme-github/archive/0.1.1.zip -n github -k
-
-ENTRYPOINT ["mdout"]
+EXPOSE 9090
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["/usr/local/bin/mdout", "http"]
