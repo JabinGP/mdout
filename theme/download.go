@@ -68,6 +68,12 @@ func DownloadTheme(themeZipURL string, themeName string) error {
 	if err != nil {
 		log.Errorln("解压失败")
 		log.Errorln(err)
+		rmErr := os.RemoveAll(path)
+		if rmErr != nil {
+			log.Errorln("删除解压失败的文件夹失败")
+			log.Errorln(rmErr)
+			return rmErr
+		}
 		return err
 	}
 	log.Debugln("解压成功，解压到" + path)
