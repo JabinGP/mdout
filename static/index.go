@@ -30,7 +30,7 @@ var (
 
 func init() {
 	Name = "mdout"
-	Version = "0.7.1"
+	Version = "0.7.2"
 
 	ConfigFolderName = "mdout"
 	ConfigFileName = "conf.toml"
