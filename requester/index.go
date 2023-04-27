@@ -30,3 +30,13 @@ func NewRequest(inPath string, params model.Params) (*Request, error) {
 	}
 	return buildFileReq(inPath, params)
 }
+
+// NewRequest return a request
+func NewRequestFromData(inData []byte, params model.Params) *Request {
+	req := &Request{
+		Params: params,
+		InType: "md-bytes",
+		Data:   inData,
+	}
+	return req
+}
